@@ -11,3 +11,99 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Departamento {
+  id               Int                @id @default(autoincrement())
+  nombre           String
+  solicitudes      Solicitud[]
+  usuarios         Usuario[]
+  itemsResponsable ItemTransparencia[] @relation("departamentoResponsable")
+
+  @@map("departamentos")
+}
+
+model Usuario {
+  id              Int             @id @default(autoincrement())
+  nombre          String
+  email           String          @unique
+  rol             String
+  departamento    Departamento    @relation(fields: [departamentoId], references: [id])
+  departamentoId  Int             @map("departamento_id")
+  solicitudes     Solicitud[]
+  logs            Log[]
+  notificaciones  Notificacion[]
+  cargasMensuales CargaMensual[]
+
+  @@map("usuarios")
+}
+
+model ItemTransparencia {
+  id                        Int            @id @default(autoincrement())
+  nombre                    String
+  descripcion               String
+  departamentoResponsable   Departamento   @relation("departamentoResponsable", fields: [departamentoResponsableId], references: [id])
+  departamentoResponsableId Int            @map("departamento_responsable_id")
+  cargasMensuales           CargaMensual[]
+
+  @@map("items_transparencia")
+}
+
+model Solicitud {
+  id              Int          @id @default(autoincrement())
+  folio           String       @unique
+  fechaRecepcion  DateTime     @map("fecha_recepcion")
+  descripcion     String
+  estado          String       @default("PENDIENTE")
+  plazoLimite     DateTime     @map("plazo_limite")
+  usuario         Usuario      @relation(fields: [usuarioId], references: [id])
+  usuarioId       Int          @map("usuario_id")
+  departamento    Departamento @relation(fields: [departamentoId], references: [id])
+  departamentoId  Int          @map("departamento_id")
+  archivos        Archivo[]
+
+  @@map("solicitudes")
+}
+
+model Archivo {
+  id           Int       @id @default(autoincrement())
+  nombre       String
+  ruta         String
+  solicitud    Solicitud @relation(fields: [solicitudId], references: [id])
+  solicitudId  Int       @map("solicitud_id")
+
+  @@map("archivos")
+}
+
+model Log {
+  id         Int      @id @default(autoincrement())
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId  Int      @map("usuario_id")
+  accion     String
+  fechaHora  DateTime @default(now()) @map("fecha_hora")
+
+  @@map("logs")
+}
+
+model Notificacion {
+  id         Int     @id @default(autoincrement())
+  usuario    Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId  Int     @map("usuario_id")
+  mensaje    String
+  leida      Boolean @default(false)
+
+  @@map("notificaciones")
+}
+
+model CargaMensual {
+  id          Int               @id @default(autoincrement())
+  item        ItemTransparencia @relation(fields: [itemId], references: [id])
+  itemId      Int               @map("item_id")
+  mes         String
+  anio        Int               @map("anio")
+  estado      String
+  fechaCarga  DateTime          @default(now()) @map("fecha_carga")
+  usuario     Usuario           @relation(fields: [usuarioId], references: [id])
+  usuarioId   Int               @map("usuario_id")
+
+  @@map("cargas_mensuales")
+}
