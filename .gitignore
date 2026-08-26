@@ -15,7 +15,7 @@ build/
 out/
 
 # Prisma
-prisma/generated/
+backend/generated/
 *.sqlite
 *.db
 
