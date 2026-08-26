@@ -1,3 +1,15 @@
+-- CreateEnum
+CREATE TYPE "RolUsuario" AS ENUM ('OPERATIVO', 'DIRECTOR', 'ENLACE');
+
+-- CreateEnum
+CREATE TYPE "EstadoSolicitud" AS ENUM ('PENDIENTE', 'EN_PROCESO', 'RESPONDIDA', 'VENCIDA', 'PRORROGA_SOLICITADA');
+
+-- CreateEnum
+CREATE TYPE "EstadoCargaMensual" AS ENUM ('PENDIENTE', 'APROBADA', 'PUBLICADA', 'RECHAZADA');
+
+-- CreateEnum
+CREATE TYPE "TipoAccion" AS ENUM ('CREAR_SOLICITUD', 'DERIVAR_SOLICITUD', 'RESPONDER_SOLICITUD', 'SOLICITAR_PRORROGA', 'APROBAR_CARGA', 'PUBLICAR_INFORMACION', 'INICIAR_SESION');
+
 -- CreateTable
 CREATE TABLE "departamentos" (
     "id" SERIAL NOT NULL,
@@ -11,7 +23,7 @@ CREATE TABLE "usuarios" (
     "id" SERIAL NOT NULL,
     "nombre" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "rol" TEXT NOT NULL,
+    "rol" "RolUsuario" NOT NULL DEFAULT 'OPERATIVO',
     "departamento_id" INTEGER NOT NULL,
 
     CONSTRAINT "usuarios_pkey" PRIMARY KEY ("id")
@@ -33,7 +45,7 @@ CREATE TABLE "solicitudes" (
     "folio" TEXT NOT NULL,
     "fecha_recepcion" TIMESTAMP(3) NOT NULL,
     "descripcion" TEXT NOT NULL,
-    "estado" TEXT NOT NULL DEFAULT 'PENDIENTE',
+    "estado" "EstadoSolicitud" NOT NULL DEFAULT 'PENDIENTE',
     "plazo_limite" TIMESTAMP(3) NOT NULL,
     "usuario_id" INTEGER NOT NULL,
     "departamento_id" INTEGER NOT NULL,
@@ -55,7 +67,7 @@ CREATE TABLE "archivos" (
 CREATE TABLE "logs" (
     "id" SERIAL NOT NULL,
     "usuario_id" INTEGER NOT NULL,
-    "accion" TEXT NOT NULL,
+    "accion" "TipoAccion" NOT NULL,
     "fecha_hora" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "logs_pkey" PRIMARY KEY ("id")
@@ -77,7 +89,7 @@ CREATE TABLE "cargas_mensuales" (
     "item_id" INTEGER NOT NULL,
     "mes" TEXT NOT NULL,
     "anio" INTEGER NOT NULL,
-    "estado" TEXT NOT NULL,
+    "estado" "EstadoCargaMensual" NOT NULL DEFAULT 'PENDIENTE',
     "fecha_carga" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "usuario_id" INTEGER NOT NULL,
 

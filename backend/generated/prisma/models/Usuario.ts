@@ -40,7 +40,7 @@ export type UsuarioMinAggregateOutputType = {
   id: number | null
   nombre: string | null
   email: string | null
-  rol: string | null
+  rol: $Enums.RolUsuario | null
   departamentoId: number | null
 }
 
@@ -48,7 +48,7 @@ export type UsuarioMaxAggregateOutputType = {
   id: number | null
   nombre: string | null
   email: string | null
-  rol: string | null
+  rol: $Enums.RolUsuario | null
   departamentoId: number | null
 }
 
@@ -187,7 +187,7 @@ export type UsuarioGroupByOutputType = {
   id: number
   nombre: string
   email: string
-  rol: string
+  rol: $Enums.RolUsuario
   departamentoId: number
   _count: UsuarioCountAggregateOutputType | null
   _avg: UsuarioAvgAggregateOutputType | null
@@ -218,7 +218,7 @@ export type UsuarioWhereInput = {
   id?: Prisma.IntFilter<"Usuario"> | number
   nombre?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
-  rol?: Prisma.StringFilter<"Usuario"> | string
+  rol?: Prisma.EnumRolUsuarioFilter<"Usuario"> | $Enums.RolUsuario
   departamentoId?: Prisma.IntFilter<"Usuario"> | number
   departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
   solicitudes?: Prisma.SolicitudListRelationFilter
@@ -247,7 +247,7 @@ export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UsuarioWhereInput[]
   NOT?: Prisma.UsuarioWhereInput | Prisma.UsuarioWhereInput[]
   nombre?: Prisma.StringFilter<"Usuario"> | string
-  rol?: Prisma.StringFilter<"Usuario"> | string
+  rol?: Prisma.EnumRolUsuarioFilter<"Usuario"> | $Enums.RolUsuario
   departamentoId?: Prisma.IntFilter<"Usuario"> | number
   departamento?: Prisma.XOR<Prisma.DepartamentoScalarRelationFilter, Prisma.DepartamentoWhereInput>
   solicitudes?: Prisma.SolicitudListRelationFilter
@@ -276,14 +276,14 @@ export type UsuarioScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
   nombre?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
   email?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
-  rol?: Prisma.StringWithAggregatesFilter<"Usuario"> | string
+  rol?: Prisma.EnumRolUsuarioWithAggregatesFilter<"Usuario"> | $Enums.RolUsuario
   departamentoId?: Prisma.IntWithAggregatesFilter<"Usuario"> | number
 }
 
 export type UsuarioCreateInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamento: Prisma.DepartamentoCreateNestedOneWithoutUsuariosInput
   solicitudes?: Prisma.SolicitudCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogCreateNestedManyWithoutUsuarioInput
@@ -295,7 +295,7 @@ export type UsuarioUncheckedCreateInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
   solicitudes?: Prisma.SolicitudUncheckedCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogUncheckedCreateNestedManyWithoutUsuarioInput
@@ -306,7 +306,7 @@ export type UsuarioUncheckedCreateInput = {
 export type UsuarioUpdateInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
   solicitudes?: Prisma.SolicitudUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUpdateManyWithoutUsuarioNestedInput
@@ -318,7 +318,7 @@ export type UsuarioUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   solicitudes?: Prisma.SolicitudUncheckedUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -330,21 +330,21 @@ export type UsuarioCreateManyInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
 }
 
 export type UsuarioUpdateManyMutationInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
 }
 
 export type UsuarioUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -439,6 +439,10 @@ export type UsuarioUncheckedUpdateManyWithoutDepartamentoNestedInput = {
   deleteMany?: Prisma.UsuarioScalarWhereInput | Prisma.UsuarioScalarWhereInput[]
 }
 
+export type EnumRolUsuarioFieldUpdateOperationsInput = {
+  set?: $Enums.RolUsuario
+}
+
 export type UsuarioCreateNestedOneWithoutSolicitudesInput = {
   create?: Prisma.XOR<Prisma.UsuarioCreateWithoutSolicitudesInput, Prisma.UsuarioUncheckedCreateWithoutSolicitudesInput>
   connectOrCreate?: Prisma.UsuarioCreateOrConnectWithoutSolicitudesInput
@@ -498,7 +502,7 @@ export type UsuarioUpdateOneRequiredWithoutCargasMensualesNestedInput = {
 export type UsuarioCreateWithoutDepartamentoInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   solicitudes?: Prisma.SolicitudCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionCreateNestedManyWithoutUsuarioInput
@@ -509,7 +513,7 @@ export type UsuarioUncheckedCreateWithoutDepartamentoInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   solicitudes?: Prisma.SolicitudUncheckedCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogUncheckedCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionUncheckedCreateNestedManyWithoutUsuarioInput
@@ -549,14 +553,14 @@ export type UsuarioScalarWhereInput = {
   id?: Prisma.IntFilter<"Usuario"> | number
   nombre?: Prisma.StringFilter<"Usuario"> | string
   email?: Prisma.StringFilter<"Usuario"> | string
-  rol?: Prisma.StringFilter<"Usuario"> | string
+  rol?: Prisma.EnumRolUsuarioFilter<"Usuario"> | $Enums.RolUsuario
   departamentoId?: Prisma.IntFilter<"Usuario"> | number
 }
 
 export type UsuarioCreateWithoutSolicitudesInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamento: Prisma.DepartamentoCreateNestedOneWithoutUsuariosInput
   logs?: Prisma.LogCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionCreateNestedManyWithoutUsuarioInput
@@ -567,7 +571,7 @@ export type UsuarioUncheckedCreateWithoutSolicitudesInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
   logs?: Prisma.LogUncheckedCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionUncheckedCreateNestedManyWithoutUsuarioInput
@@ -593,7 +597,7 @@ export type UsuarioUpdateToOneWithWhereWithoutSolicitudesInput = {
 export type UsuarioUpdateWithoutSolicitudesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
   logs?: Prisma.LogUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUpdateManyWithoutUsuarioNestedInput
@@ -604,7 +608,7 @@ export type UsuarioUncheckedUpdateWithoutSolicitudesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   logs?: Prisma.LogUncheckedUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -614,7 +618,7 @@ export type UsuarioUncheckedUpdateWithoutSolicitudesInput = {
 export type UsuarioCreateWithoutLogsInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamento: Prisma.DepartamentoCreateNestedOneWithoutUsuariosInput
   solicitudes?: Prisma.SolicitudCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionCreateNestedManyWithoutUsuarioInput
@@ -625,7 +629,7 @@ export type UsuarioUncheckedCreateWithoutLogsInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
   solicitudes?: Prisma.SolicitudUncheckedCreateNestedManyWithoutUsuarioInput
   notificaciones?: Prisma.NotificacionUncheckedCreateNestedManyWithoutUsuarioInput
@@ -651,7 +655,7 @@ export type UsuarioUpdateToOneWithWhereWithoutLogsInput = {
 export type UsuarioUpdateWithoutLogsInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
   solicitudes?: Prisma.SolicitudUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUpdateManyWithoutUsuarioNestedInput
@@ -662,7 +666,7 @@ export type UsuarioUncheckedUpdateWithoutLogsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   solicitudes?: Prisma.SolicitudUncheckedUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -672,7 +676,7 @@ export type UsuarioUncheckedUpdateWithoutLogsInput = {
 export type UsuarioCreateWithoutNotificacionesInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamento: Prisma.DepartamentoCreateNestedOneWithoutUsuariosInput
   solicitudes?: Prisma.SolicitudCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogCreateNestedManyWithoutUsuarioInput
@@ -683,7 +687,7 @@ export type UsuarioUncheckedCreateWithoutNotificacionesInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
   solicitudes?: Prisma.SolicitudUncheckedCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogUncheckedCreateNestedManyWithoutUsuarioInput
@@ -709,7 +713,7 @@ export type UsuarioUpdateToOneWithWhereWithoutNotificacionesInput = {
 export type UsuarioUpdateWithoutNotificacionesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
   solicitudes?: Prisma.SolicitudUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUpdateManyWithoutUsuarioNestedInput
@@ -720,7 +724,7 @@ export type UsuarioUncheckedUpdateWithoutNotificacionesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   solicitudes?: Prisma.SolicitudUncheckedUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -730,7 +734,7 @@ export type UsuarioUncheckedUpdateWithoutNotificacionesInput = {
 export type UsuarioCreateWithoutCargasMensualesInput = {
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamento: Prisma.DepartamentoCreateNestedOneWithoutUsuariosInput
   solicitudes?: Prisma.SolicitudCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogCreateNestedManyWithoutUsuarioInput
@@ -741,7 +745,7 @@ export type UsuarioUncheckedCreateWithoutCargasMensualesInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
   departamentoId: number
   solicitudes?: Prisma.SolicitudUncheckedCreateNestedManyWithoutUsuarioInput
   logs?: Prisma.LogUncheckedCreateNestedManyWithoutUsuarioInput
@@ -767,7 +771,7 @@ export type UsuarioUpdateToOneWithWhereWithoutCargasMensualesInput = {
 export type UsuarioUpdateWithoutCargasMensualesInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
   solicitudes?: Prisma.SolicitudUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUpdateManyWithoutUsuarioNestedInput
@@ -778,7 +782,7 @@ export type UsuarioUncheckedUpdateWithoutCargasMensualesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   solicitudes?: Prisma.SolicitudUncheckedUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -789,13 +793,13 @@ export type UsuarioCreateManyDepartamentoInput = {
   id?: number
   nombre: string
   email: string
-  rol: string
+  rol?: $Enums.RolUsuario
 }
 
 export type UsuarioUpdateWithoutDepartamentoInput = {
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   solicitudes?: Prisma.SolicitudUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUpdateManyWithoutUsuarioNestedInput
@@ -806,7 +810,7 @@ export type UsuarioUncheckedUpdateWithoutDepartamentoInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
   solicitudes?: Prisma.SolicitudUncheckedUpdateManyWithoutUsuarioNestedInput
   logs?: Prisma.LogUncheckedUpdateManyWithoutUsuarioNestedInput
   notificaciones?: Prisma.NotificacionUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -817,7 +821,7 @@ export type UsuarioUncheckedUpdateManyWithoutDepartamentoInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   nombre?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  rol?: Prisma.StringFieldUpdateOperationsInput | string
+  rol?: Prisma.EnumRolUsuarioFieldUpdateOperationsInput | $Enums.RolUsuario
 }
 
 
@@ -947,7 +951,7 @@ export type $UsuarioPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: number
     nombre: string
     email: string
-    rol: string
+    rol: $Enums.RolUsuario
     departamentoId: number
   }, ExtArgs["result"]["usuario"]>
   composites: {}
@@ -1380,7 +1384,7 @@ export interface UsuarioFieldRefs {
   readonly id: Prisma.FieldRef<"Usuario", 'Int'>
   readonly nombre: Prisma.FieldRef<"Usuario", 'String'>
   readonly email: Prisma.FieldRef<"Usuario", 'String'>
-  readonly rol: Prisma.FieldRef<"Usuario", 'String'>
+  readonly rol: Prisma.FieldRef<"Usuario", 'RolUsuario'>
   readonly departamentoId: Prisma.FieldRef<"Usuario", 'Int'>
 }
     

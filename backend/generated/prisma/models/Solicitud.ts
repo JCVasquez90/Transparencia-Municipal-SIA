@@ -43,7 +43,7 @@ export type SolicitudMinAggregateOutputType = {
   folio: string | null
   fechaRecepcion: Date | null
   descripcion: string | null
-  estado: string | null
+  estado: $Enums.EstadoSolicitud | null
   plazoLimite: Date | null
   usuarioId: number | null
   departamentoId: number | null
@@ -54,7 +54,7 @@ export type SolicitudMaxAggregateOutputType = {
   folio: string | null
   fechaRecepcion: Date | null
   descripcion: string | null
-  estado: string | null
+  estado: $Enums.EstadoSolicitud | null
   plazoLimite: Date | null
   usuarioId: number | null
   departamentoId: number | null
@@ -210,7 +210,7 @@ export type SolicitudGroupByOutputType = {
   folio: string
   fechaRecepcion: Date
   descripcion: string
-  estado: string
+  estado: $Enums.EstadoSolicitud
   plazoLimite: Date
   usuarioId: number
   departamentoId: number
@@ -244,7 +244,7 @@ export type SolicitudWhereInput = {
   folio?: Prisma.StringFilter<"Solicitud"> | string
   fechaRecepcion?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   descripcion?: Prisma.StringFilter<"Solicitud"> | string
-  estado?: Prisma.StringFilter<"Solicitud"> | string
+  estado?: Prisma.EnumEstadoSolicitudFilter<"Solicitud"> | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   usuarioId?: Prisma.IntFilter<"Solicitud"> | number
   departamentoId?: Prisma.IntFilter<"Solicitud"> | number
@@ -275,7 +275,7 @@ export type SolicitudWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.SolicitudWhereInput | Prisma.SolicitudWhereInput[]
   fechaRecepcion?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   descripcion?: Prisma.StringFilter<"Solicitud"> | string
-  estado?: Prisma.StringFilter<"Solicitud"> | string
+  estado?: Prisma.EnumEstadoSolicitudFilter<"Solicitud"> | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   usuarioId?: Prisma.IntFilter<"Solicitud"> | number
   departamentoId?: Prisma.IntFilter<"Solicitud"> | number
@@ -308,7 +308,7 @@ export type SolicitudScalarWhereWithAggregatesInput = {
   folio?: Prisma.StringWithAggregatesFilter<"Solicitud"> | string
   fechaRecepcion?: Prisma.DateTimeWithAggregatesFilter<"Solicitud"> | Date | string
   descripcion?: Prisma.StringWithAggregatesFilter<"Solicitud"> | string
-  estado?: Prisma.StringWithAggregatesFilter<"Solicitud"> | string
+  estado?: Prisma.EnumEstadoSolicitudWithAggregatesFilter<"Solicitud"> | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeWithAggregatesFilter<"Solicitud"> | Date | string
   usuarioId?: Prisma.IntWithAggregatesFilter<"Solicitud"> | number
   departamentoId?: Prisma.IntWithAggregatesFilter<"Solicitud"> | number
@@ -318,7 +318,7 @@ export type SolicitudCreateInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutSolicitudesInput
   departamento: Prisma.DepartamentoCreateNestedOneWithoutSolicitudesInput
@@ -330,7 +330,7 @@ export type SolicitudUncheckedCreateInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuarioId: number
   departamentoId: number
@@ -341,7 +341,7 @@ export type SolicitudUpdateInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutSolicitudesNestedInput
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutSolicitudesNestedInput
@@ -353,7 +353,7 @@ export type SolicitudUncheckedUpdateInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -365,7 +365,7 @@ export type SolicitudCreateManyInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuarioId: number
   departamentoId: number
@@ -375,7 +375,7 @@ export type SolicitudUpdateManyMutationInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -384,7 +384,7 @@ export type SolicitudUncheckedUpdateManyInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -538,6 +538,10 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type EnumEstadoSolicitudFieldUpdateOperationsInput = {
+  set?: $Enums.EstadoSolicitud
+}
+
 export type SolicitudCreateNestedOneWithoutArchivosInput = {
   create?: Prisma.XOR<Prisma.SolicitudCreateWithoutArchivosInput, Prisma.SolicitudUncheckedCreateWithoutArchivosInput>
   connectOrCreate?: Prisma.SolicitudCreateOrConnectWithoutArchivosInput
@@ -556,7 +560,7 @@ export type SolicitudCreateWithoutDepartamentoInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutSolicitudesInput
   archivos?: Prisma.ArchivoCreateNestedManyWithoutSolicitudInput
@@ -567,7 +571,7 @@ export type SolicitudUncheckedCreateWithoutDepartamentoInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuarioId: number
   archivos?: Prisma.ArchivoUncheckedCreateNestedManyWithoutSolicitudInput
@@ -607,7 +611,7 @@ export type SolicitudScalarWhereInput = {
   folio?: Prisma.StringFilter<"Solicitud"> | string
   fechaRecepcion?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   descripcion?: Prisma.StringFilter<"Solicitud"> | string
-  estado?: Prisma.StringFilter<"Solicitud"> | string
+  estado?: Prisma.EnumEstadoSolicitudFilter<"Solicitud"> | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFilter<"Solicitud"> | Date | string
   usuarioId?: Prisma.IntFilter<"Solicitud"> | number
   departamentoId?: Prisma.IntFilter<"Solicitud"> | number
@@ -617,7 +621,7 @@ export type SolicitudCreateWithoutUsuarioInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   departamento: Prisma.DepartamentoCreateNestedOneWithoutSolicitudesInput
   archivos?: Prisma.ArchivoCreateNestedManyWithoutSolicitudInput
@@ -628,7 +632,7 @@ export type SolicitudUncheckedCreateWithoutUsuarioInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   departamentoId: number
   archivos?: Prisma.ArchivoUncheckedCreateNestedManyWithoutSolicitudInput
@@ -664,7 +668,7 @@ export type SolicitudCreateWithoutArchivosInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutSolicitudesInput
   departamento: Prisma.DepartamentoCreateNestedOneWithoutSolicitudesInput
@@ -675,7 +679,7 @@ export type SolicitudUncheckedCreateWithoutArchivosInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuarioId: number
   departamentoId: number
@@ -701,7 +705,7 @@ export type SolicitudUpdateWithoutArchivosInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutSolicitudesNestedInput
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutSolicitudesNestedInput
@@ -712,7 +716,7 @@ export type SolicitudUncheckedUpdateWithoutArchivosInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
@@ -723,7 +727,7 @@ export type SolicitudCreateManyDepartamentoInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   usuarioId: number
 }
@@ -732,7 +736,7 @@ export type SolicitudUpdateWithoutDepartamentoInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutSolicitudesNestedInput
   archivos?: Prisma.ArchivoUpdateManyWithoutSolicitudNestedInput
@@ -743,7 +747,7 @@ export type SolicitudUncheckedUpdateWithoutDepartamentoInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
   archivos?: Prisma.ArchivoUncheckedUpdateManyWithoutSolicitudNestedInput
@@ -754,7 +758,7 @@ export type SolicitudUncheckedUpdateManyWithoutDepartamentoInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -764,7 +768,7 @@ export type SolicitudCreateManyUsuarioInput = {
   folio: string
   fechaRecepcion: Date | string
   descripcion: string
-  estado?: string
+  estado?: $Enums.EstadoSolicitud
   plazoLimite: Date | string
   departamentoId: number
 }
@@ -773,7 +777,7 @@ export type SolicitudUpdateWithoutUsuarioInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departamento?: Prisma.DepartamentoUpdateOneRequiredWithoutSolicitudesNestedInput
   archivos?: Prisma.ArchivoUpdateManyWithoutSolicitudNestedInput
@@ -784,7 +788,7 @@ export type SolicitudUncheckedUpdateWithoutUsuarioInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
   archivos?: Prisma.ArchivoUncheckedUpdateManyWithoutSolicitudNestedInput
@@ -795,7 +799,7 @@ export type SolicitudUncheckedUpdateManyWithoutUsuarioInput = {
   folio?: Prisma.StringFieldUpdateOperationsInput | string
   fechaRecepcion?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   descripcion?: Prisma.StringFieldUpdateOperationsInput | string
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoSolicitudFieldUpdateOperationsInput | $Enums.EstadoSolicitud
   plazoLimite?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departamentoId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -911,7 +915,7 @@ export type $SolicitudPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     folio: string
     fechaRecepcion: Date
     descripcion: string
-    estado: string
+    estado: $Enums.EstadoSolicitud
     plazoLimite: Date
     usuarioId: number
     departamentoId: number
@@ -1345,7 +1349,7 @@ export interface SolicitudFieldRefs {
   readonly folio: Prisma.FieldRef<"Solicitud", 'String'>
   readonly fechaRecepcion: Prisma.FieldRef<"Solicitud", 'DateTime'>
   readonly descripcion: Prisma.FieldRef<"Solicitud", 'String'>
-  readonly estado: Prisma.FieldRef<"Solicitud", 'String'>
+  readonly estado: Prisma.FieldRef<"Solicitud", 'EstadoSolicitud'>
   readonly plazoLimite: Prisma.FieldRef<"Solicitud", 'DateTime'>
   readonly usuarioId: Prisma.FieldRef<"Solicitud", 'Int'>
   readonly departamentoId: Prisma.FieldRef<"Solicitud", 'Int'>

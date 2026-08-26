@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -11,6 +9,45 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum RolUsuario {
+  OPERATIVO
+  DIRECTOR
+  ENLACE
+}
+
+enum EstadoSolicitud {
+  PENDIENTE
+  EN_PROCESO
+  RESPONDIDA
+  VENCIDA
+  PRORROGA_SOLICITADA
+}
+
+enum EstadoCargaMensual {
+  PENDIENTE
+  APROBADA
+  PUBLICADA
+  RECHAZADA
+}
+
+enum TipoAccion {
+  CREAR_SOLICITUD
+  DERIVAR_SOLICITUD
+  RESPONDER_SOLICITUD
+  SOLICITAR_PRORROGA
+  APROBAR_CARGA
+  PUBLICAR_INFORMACION
+  INICIAR_SESION
+}
+
+// ============================================
+// MODELOS
+// ============================================
 
 model Departamento {
   id               Int                @id @default(autoincrement())
@@ -26,7 +63,7 @@ model Usuario {
   id              Int             @id @default(autoincrement())
   nombre          String
   email           String          @unique
-  rol             String
+  rol             RolUsuario      @default(OPERATIVO)
   departamento    Departamento    @relation(fields: [departamentoId], references: [id])
   departamentoId  Int             @map("departamento_id")
   solicitudes     Solicitud[]
@@ -49,61 +86,61 @@ model ItemTransparencia {
 }
 
 model Solicitud {
-  id              Int          @id @default(autoincrement())
-  folio           String       @unique
-  fechaRecepcion  DateTime     @map("fecha_recepcion")
-  descripcion     String
-  estado          String       @default("PENDIENTE")
-  plazoLimite     DateTime     @map("plazo_limite")
-  usuario         Usuario      @relation(fields: [usuarioId], references: [id])
-  usuarioId       Int          @map("usuario_id")
-  departamento    Departamento @relation(fields: [departamentoId], references: [id])
-  departamentoId  Int          @map("departamento_id")
-  archivos        Archivo[]
+  id             Int              @id @default(autoincrement())
+  folio          String           @unique
+  fechaRecepcion DateTime         @map("fecha_recepcion")
+  descripcion    String
+  estado         EstadoSolicitud  @default(PENDIENTE)
+  plazoLimite    DateTime         @map("plazo_limite")
+  usuario        Usuario          @relation(fields: [usuarioId], references: [id])
+  usuarioId      Int              @map("usuario_id")
+  departamento   Departamento     @relation(fields: [departamentoId], references: [id])
+  departamentoId Int              @map("departamento_id")
+  archivos       Archivo[]
 
   @@map("solicitudes")
 }
 
 model Archivo {
-  id           Int       @id @default(autoincrement())
-  nombre       String
-  ruta         String
-  solicitud    Solicitud @relation(fields: [solicitudId], references: [id])
-  solicitudId  Int       @map("solicitud_id")
+  id          Int       @id @default(autoincrement())
+  nombre      String
+  ruta        String
+  solicitud   Solicitud @relation(fields: [solicitudId], references: [id])
+  solicitudId Int       @map("solicitud_id")
 
   @@map("archivos")
 }
 
 model Log {
-  id         Int      @id @default(autoincrement())
-  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
-  usuarioId  Int      @map("usuario_id")
-  accion     String
-  fechaHora  DateTime @default(now()) @map("fecha_hora")
+  id        Int        @id @default(autoincrement())
+  usuario   Usuario    @relation(fields: [usuarioId], references: [id])
+  usuarioId Int        @map("usuario_id")
+  accion    TipoAccion
+  fechaHora DateTime   @default(now()) @map("fecha_hora")
 
   @@map("logs")
 }
 
 model Notificacion {
-  id         Int     @id @default(autoincrement())
-  usuario    Usuario @relation(fields: [usuarioId], references: [id])
-  usuarioId  Int     @map("usuario_id")
-  mensaje    String
-  leida      Boolean @default(false)
+  id        Int     @id @default(autoincrement())
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int     @map("usuario_id")
+  mensaje   String
+  leida     Boolean @default(false)
 
   @@map("notificaciones")
 }
 
 model CargaMensual {
-  id          Int               @id @default(autoincrement())
-  item        ItemTransparencia @relation(fields: [itemId], references: [id])
-  itemId      Int               @map("item_id")
-  mes         String
-  anio        Int               @map("anio")
-  estado      String
-  fechaCarga  DateTime          @default(now()) @map("fecha_carga")
-  usuario     Usuario           @relation(fields: [usuarioId], references: [id])
-  usuarioId   Int               @map("usuario_id")
+  id         Int                   @id @default(autoincrement())
+  item       ItemTransparencia     @relation(fields: [itemId], references: [id])
+  itemId     Int                   @map("item_id")
+  mes        String
+  anio       Int                   @map("anio")
+  estado     EstadoCargaMensual    @default(PENDIENTE)
+  fechaCarga DateTime              @default(now()) @map("fecha_carga")
+  usuario    Usuario               @relation(fields: [usuarioId], references: [id])
+  usuarioId  Int                   @map("usuario_id")
 
   @@map("cargas_mensuales")
 }

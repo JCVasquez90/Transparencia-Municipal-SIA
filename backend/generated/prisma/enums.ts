@@ -9,7 +9,44 @@
 * 🟢 You can import this file directly.
 */
 
+export const RolUsuario = {
+  OPERATIVO: 'OPERATIVO',
+  DIRECTOR: 'DIRECTOR',
+  ENLACE: 'ENLACE'
+} as const
+
+export type RolUsuario = (typeof RolUsuario)[keyof typeof RolUsuario]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const EstadoSolicitud = {
+  PENDIENTE: 'PENDIENTE',
+  EN_PROCESO: 'EN_PROCESO',
+  RESPONDIDA: 'RESPONDIDA',
+  VENCIDA: 'VENCIDA',
+  PRORROGA_SOLICITADA: 'PRORROGA_SOLICITADA'
+} as const
+
+export type EstadoSolicitud = (typeof EstadoSolicitud)[keyof typeof EstadoSolicitud]
+
+
+export const EstadoCargaMensual = {
+  PENDIENTE: 'PENDIENTE',
+  APROBADA: 'APROBADA',
+  PUBLICADA: 'PUBLICADA',
+  RECHAZADA: 'RECHAZADA'
+} as const
+
+export type EstadoCargaMensual = (typeof EstadoCargaMensual)[keyof typeof EstadoCargaMensual]
+
+
+export const TipoAccion = {
+  CREAR_SOLICITUD: 'CREAR_SOLICITUD',
+  DERIVAR_SOLICITUD: 'DERIVAR_SOLICITUD',
+  RESPONDER_SOLICITUD: 'RESPONDER_SOLICITUD',
+  SOLICITAR_PRORROGA: 'SOLICITAR_PRORROGA',
+  APROBAR_CARGA: 'APROBAR_CARGA',
+  PUBLICAR_INFORMACION: 'PUBLICAR_INFORMACION',
+  INICIAR_SESION: 'INICIAR_SESION'
+} as const
+
+export type TipoAccion = (typeof TipoAccion)[keyof typeof TipoAccion]

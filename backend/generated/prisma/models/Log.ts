@@ -39,14 +39,14 @@ export type LogSumAggregateOutputType = {
 export type LogMinAggregateOutputType = {
   id: number | null
   usuarioId: number | null
-  accion: string | null
+  accion: $Enums.TipoAccion | null
   fechaHora: Date | null
 }
 
 export type LogMaxAggregateOutputType = {
   id: number | null
   usuarioId: number | null
-  accion: string | null
+  accion: $Enums.TipoAccion | null
   fechaHora: Date | null
 }
 
@@ -180,7 +180,7 @@ export type LogGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type LogGroupByOutputType = {
   id: number
   usuarioId: number
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora: Date
   _count: LogCountAggregateOutputType | null
   _avg: LogAvgAggregateOutputType | null
@@ -210,7 +210,7 @@ export type LogWhereInput = {
   NOT?: Prisma.LogWhereInput | Prisma.LogWhereInput[]
   id?: Prisma.IntFilter<"Log"> | number
   usuarioId?: Prisma.IntFilter<"Log"> | number
-  accion?: Prisma.StringFilter<"Log"> | string
+  accion?: Prisma.EnumTipoAccionFilter<"Log"> | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFilter<"Log"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }
@@ -229,7 +229,7 @@ export type LogWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LogWhereInput[]
   NOT?: Prisma.LogWhereInput | Prisma.LogWhereInput[]
   usuarioId?: Prisma.IntFilter<"Log"> | number
-  accion?: Prisma.StringFilter<"Log"> | string
+  accion?: Prisma.EnumTipoAccionFilter<"Log"> | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFilter<"Log"> | Date | string
   usuario?: Prisma.XOR<Prisma.UsuarioScalarRelationFilter, Prisma.UsuarioWhereInput>
 }, "id">
@@ -252,12 +252,12 @@ export type LogScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LogScalarWhereWithAggregatesInput | Prisma.LogScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Log"> | number
   usuarioId?: Prisma.IntWithAggregatesFilter<"Log"> | number
-  accion?: Prisma.StringWithAggregatesFilter<"Log"> | string
+  accion?: Prisma.EnumTipoAccionWithAggregatesFilter<"Log"> | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeWithAggregatesFilter<"Log"> | Date | string
 }
 
 export type LogCreateInput = {
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutLogsInput
 }
@@ -265,12 +265,12 @@ export type LogCreateInput = {
 export type LogUncheckedCreateInput = {
   id?: number
   usuarioId: number
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
 }
 
 export type LogUpdateInput = {
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutLogsNestedInput
 }
@@ -278,26 +278,26 @@ export type LogUpdateInput = {
 export type LogUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LogCreateManyInput = {
   id?: number
   usuarioId: number
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
 }
 
 export type LogUpdateManyMutationInput = {
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LogUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -384,14 +384,18 @@ export type LogUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.LogScalarWhereInput | Prisma.LogScalarWhereInput[]
 }
 
+export type EnumTipoAccionFieldUpdateOperationsInput = {
+  set?: $Enums.TipoAccion
+}
+
 export type LogCreateWithoutUsuarioInput = {
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
 }
 
 export type LogUncheckedCreateWithoutUsuarioInput = {
   id?: number
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
 }
 
@@ -427,30 +431,30 @@ export type LogScalarWhereInput = {
   NOT?: Prisma.LogScalarWhereInput | Prisma.LogScalarWhereInput[]
   id?: Prisma.IntFilter<"Log"> | number
   usuarioId?: Prisma.IntFilter<"Log"> | number
-  accion?: Prisma.StringFilter<"Log"> | string
+  accion?: Prisma.EnumTipoAccionFilter<"Log"> | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFilter<"Log"> | Date | string
 }
 
 export type LogCreateManyUsuarioInput = {
   id?: number
-  accion: string
+  accion: $Enums.TipoAccion
   fechaHora?: Date | string
 }
 
 export type LogUpdateWithoutUsuarioInput = {
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LogUncheckedUpdateWithoutUsuarioInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LogUncheckedUpdateManyWithoutUsuarioInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  accion?: Prisma.StringFieldUpdateOperationsInput | string
+  accion?: Prisma.EnumTipoAccionFieldUpdateOperationsInput | $Enums.TipoAccion
   fechaHora?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -506,7 +510,7 @@ export type $LogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     usuarioId: number
-    accion: string
+    accion: $Enums.TipoAccion
     fechaHora: Date
   }, ExtArgs["result"]["log"]>
   composites: {}
@@ -934,7 +938,7 @@ export interface Prisma__LogClient<T, Null = never, ExtArgs extends runtime.Type
 export interface LogFieldRefs {
   readonly id: Prisma.FieldRef<"Log", 'Int'>
   readonly usuarioId: Prisma.FieldRef<"Log", 'Int'>
-  readonly accion: Prisma.FieldRef<"Log", 'String'>
+  readonly accion: Prisma.FieldRef<"Log", 'TipoAccion'>
   readonly fechaHora: Prisma.FieldRef<"Log", 'DateTime'>
 }
     

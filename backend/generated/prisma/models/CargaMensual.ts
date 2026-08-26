@@ -45,7 +45,7 @@ export type CargaMensualMinAggregateOutputType = {
   itemId: number | null
   mes: string | null
   anio: number | null
-  estado: string | null
+  estado: $Enums.EstadoCargaMensual | null
   fechaCarga: Date | null
   usuarioId: number | null
 }
@@ -55,7 +55,7 @@ export type CargaMensualMaxAggregateOutputType = {
   itemId: number | null
   mes: string | null
   anio: number | null
-  estado: string | null
+  estado: $Enums.EstadoCargaMensual | null
   fechaCarga: Date | null
   usuarioId: number | null
 }
@@ -208,7 +208,7 @@ export type CargaMensualGroupByOutputType = {
   itemId: number
   mes: string
   anio: number
-  estado: string
+  estado: $Enums.EstadoCargaMensual
   fechaCarga: Date
   usuarioId: number
   _count: CargaMensualCountAggregateOutputType | null
@@ -241,7 +241,7 @@ export type CargaMensualWhereInput = {
   itemId?: Prisma.IntFilter<"CargaMensual"> | number
   mes?: Prisma.StringFilter<"CargaMensual"> | string
   anio?: Prisma.IntFilter<"CargaMensual"> | number
-  estado?: Prisma.StringFilter<"CargaMensual"> | string
+  estado?: Prisma.EnumEstadoCargaMensualFilter<"CargaMensual"> | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFilter<"CargaMensual"> | Date | string
   usuarioId?: Prisma.IntFilter<"CargaMensual"> | number
   item?: Prisma.XOR<Prisma.ItemTransparenciaScalarRelationFilter, Prisma.ItemTransparenciaWhereInput>
@@ -268,7 +268,7 @@ export type CargaMensualWhereUniqueInput = Prisma.AtLeast<{
   itemId?: Prisma.IntFilter<"CargaMensual"> | number
   mes?: Prisma.StringFilter<"CargaMensual"> | string
   anio?: Prisma.IntFilter<"CargaMensual"> | number
-  estado?: Prisma.StringFilter<"CargaMensual"> | string
+  estado?: Prisma.EnumEstadoCargaMensualFilter<"CargaMensual"> | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFilter<"CargaMensual"> | Date | string
   usuarioId?: Prisma.IntFilter<"CargaMensual"> | number
   item?: Prisma.XOR<Prisma.ItemTransparenciaScalarRelationFilter, Prisma.ItemTransparenciaWhereInput>
@@ -298,7 +298,7 @@ export type CargaMensualScalarWhereWithAggregatesInput = {
   itemId?: Prisma.IntWithAggregatesFilter<"CargaMensual"> | number
   mes?: Prisma.StringWithAggregatesFilter<"CargaMensual"> | string
   anio?: Prisma.IntWithAggregatesFilter<"CargaMensual"> | number
-  estado?: Prisma.StringWithAggregatesFilter<"CargaMensual"> | string
+  estado?: Prisma.EnumEstadoCargaMensualWithAggregatesFilter<"CargaMensual"> | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeWithAggregatesFilter<"CargaMensual"> | Date | string
   usuarioId?: Prisma.IntWithAggregatesFilter<"CargaMensual"> | number
 }
@@ -306,7 +306,7 @@ export type CargaMensualScalarWhereWithAggregatesInput = {
 export type CargaMensualCreateInput = {
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   item: Prisma.ItemTransparenciaCreateNestedOneWithoutCargasMensualesInput
   usuario: Prisma.UsuarioCreateNestedOneWithoutCargasMensualesInput
@@ -317,7 +317,7 @@ export type CargaMensualUncheckedCreateInput = {
   itemId: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   usuarioId: number
 }
@@ -325,7 +325,7 @@ export type CargaMensualUncheckedCreateInput = {
 export type CargaMensualUpdateInput = {
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   item?: Prisma.ItemTransparenciaUpdateOneRequiredWithoutCargasMensualesNestedInput
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutCargasMensualesNestedInput
@@ -336,7 +336,7 @@ export type CargaMensualUncheckedUpdateInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -346,7 +346,7 @@ export type CargaMensualCreateManyInput = {
   itemId: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   usuarioId: number
 }
@@ -354,7 +354,7 @@ export type CargaMensualCreateManyInput = {
 export type CargaMensualUpdateManyMutationInput = {
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -363,7 +363,7 @@ export type CargaMensualUncheckedUpdateManyInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -506,10 +506,14 @@ export type CargaMensualUncheckedUpdateManyWithoutItemNestedInput = {
   deleteMany?: Prisma.CargaMensualScalarWhereInput | Prisma.CargaMensualScalarWhereInput[]
 }
 
+export type EnumEstadoCargaMensualFieldUpdateOperationsInput = {
+  set?: $Enums.EstadoCargaMensual
+}
+
 export type CargaMensualCreateWithoutUsuarioInput = {
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   item: Prisma.ItemTransparenciaCreateNestedOneWithoutCargasMensualesInput
 }
@@ -519,7 +523,7 @@ export type CargaMensualUncheckedCreateWithoutUsuarioInput = {
   itemId: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
 }
 
@@ -557,7 +561,7 @@ export type CargaMensualScalarWhereInput = {
   itemId?: Prisma.IntFilter<"CargaMensual"> | number
   mes?: Prisma.StringFilter<"CargaMensual"> | string
   anio?: Prisma.IntFilter<"CargaMensual"> | number
-  estado?: Prisma.StringFilter<"CargaMensual"> | string
+  estado?: Prisma.EnumEstadoCargaMensualFilter<"CargaMensual"> | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFilter<"CargaMensual"> | Date | string
   usuarioId?: Prisma.IntFilter<"CargaMensual"> | number
 }
@@ -565,7 +569,7 @@ export type CargaMensualScalarWhereInput = {
 export type CargaMensualCreateWithoutItemInput = {
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   usuario: Prisma.UsuarioCreateNestedOneWithoutCargasMensualesInput
 }
@@ -574,7 +578,7 @@ export type CargaMensualUncheckedCreateWithoutItemInput = {
   id?: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   usuarioId: number
 }
@@ -610,14 +614,14 @@ export type CargaMensualCreateManyUsuarioInput = {
   itemId: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
 }
 
 export type CargaMensualUpdateWithoutUsuarioInput = {
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   item?: Prisma.ItemTransparenciaUpdateOneRequiredWithoutCargasMensualesNestedInput
 }
@@ -627,7 +631,7 @@ export type CargaMensualUncheckedUpdateWithoutUsuarioInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -636,7 +640,7 @@ export type CargaMensualUncheckedUpdateManyWithoutUsuarioInput = {
   itemId?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -644,7 +648,7 @@ export type CargaMensualCreateManyItemInput = {
   id?: number
   mes: string
   anio: number
-  estado: string
+  estado?: $Enums.EstadoCargaMensual
   fechaCarga?: Date | string
   usuarioId: number
 }
@@ -652,7 +656,7 @@ export type CargaMensualCreateManyItemInput = {
 export type CargaMensualUpdateWithoutItemInput = {
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.UsuarioUpdateOneRequiredWithoutCargasMensualesNestedInput
 }
@@ -661,7 +665,7 @@ export type CargaMensualUncheckedUpdateWithoutItemInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -670,7 +674,7 @@ export type CargaMensualUncheckedUpdateManyWithoutItemInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   mes?: Prisma.StringFieldUpdateOperationsInput | string
   anio?: Prisma.IntFieldUpdateOperationsInput | number
-  estado?: Prisma.StringFieldUpdateOperationsInput | string
+  estado?: Prisma.EnumEstadoCargaMensualFieldUpdateOperationsInput | $Enums.EstadoCargaMensual
   fechaCarga?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuarioId?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -748,7 +752,7 @@ export type $CargaMensualPayload<ExtArgs extends runtime.Types.Extensions.Intern
     itemId: number
     mes: string
     anio: number
-    estado: string
+    estado: $Enums.EstadoCargaMensual
     fechaCarga: Date
     usuarioId: number
   }, ExtArgs["result"]["cargaMensual"]>
@@ -1180,7 +1184,7 @@ export interface CargaMensualFieldRefs {
   readonly itemId: Prisma.FieldRef<"CargaMensual", 'Int'>
   readonly mes: Prisma.FieldRef<"CargaMensual", 'String'>
   readonly anio: Prisma.FieldRef<"CargaMensual", 'Int'>
-  readonly estado: Prisma.FieldRef<"CargaMensual", 'String'>
+  readonly estado: Prisma.FieldRef<"CargaMensual", 'EstadoCargaMensual'>
   readonly fechaCarga: Prisma.FieldRef<"CargaMensual", 'DateTime'>
   readonly usuarioId: Prisma.FieldRef<"CargaMensual", 'Int'>
 }

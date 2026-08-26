@@ -1192,6 +1192,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'RolUsuario'
+ */
+export type EnumRolUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RolUsuario'>
+    
+
+
+/**
+ * Reference to a field of type 'RolUsuario[]'
+ */
+export type ListEnumRolUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RolUsuario[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -1206,9 +1220,51 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'EstadoSolicitud'
+ */
+export type EnumEstadoSolicitudFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoSolicitud'>
+    
+
+
+/**
+ * Reference to a field of type 'EstadoSolicitud[]'
+ */
+export type ListEnumEstadoSolicitudFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoSolicitud[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TipoAccion'
+ */
+export type EnumTipoAccionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoAccion'>
+    
+
+
+/**
+ * Reference to a field of type 'TipoAccion[]'
+ */
+export type ListEnumTipoAccionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoAccion[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'EstadoCargaMensual'
+ */
+export type EnumEstadoCargaMensualFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoCargaMensual'>
+    
+
+
+/**
+ * Reference to a field of type 'EstadoCargaMensual[]'
+ */
+export type ListEnumEstadoCargaMensualFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EstadoCargaMensual[]'>
     
 
 
