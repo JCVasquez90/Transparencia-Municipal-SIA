@@ -105,11 +105,19 @@ DATABASE_URL="postgresql://postgres:miPassword@localhost:5432/transparencia_db?s
 
 ---
 # levantar proyecto despues de la configuracion.
-# Terminal Backend.
+## Terminal Backend.
 
 cd backend
 npm run dev
 ## El servidor estará en http://localhost:5000.
+
+GET /api/health → Verificar que el servidor está funcionando.
+
+GET /api/solicitudes → Ruta de prueba para solicitudes.
+
+GET /api/usuarios → Ruta de prueba para usuarios.
+
+GET /api/transparencia → Ruta de prueba para transparencia activa.
 
 ## Terminal Frontend 
 
@@ -123,18 +131,28 @@ npm start
 
 transparencia-municipal-sia/
 ├── backend/
-│   ├── src/               (código fuente - se irá creando)
+│   ├── src/
+│   │   ├── routes/          # Definición de endpoints
+│   │   ├── controllers/     # Lógica de los endpoints
+│   │   ├── services/        # Lógica de negocio
+│   │   ├── middlewares/     # Autenticación, validación, errores
+│   │   ├── dtos/            # Contratos de entrada/salida
+│   │   ├── utils/           # Funciones auxiliares
+│   │   ├── app.ts           # Configuración de Express
+│   │   └── index.ts         # Punto de entrada del servidor
 │   ├── prisma/
-│   │   └── schema.prisma  (modelo de datos)
-│   ├── node_modules/      (dependencias - ignora en Git)
-│   ├── .env               (variables locales - NO SUBIR)
+│   │   └── schema.prisma    # Modelo de datos
+│   ├── generated/           # Código generado por Prisma (ignorado por Git)
+│   ├── node_modules/        # Dependencias (ignorado por Git)
+│   ├── .env                 # Variables locales (NO SUBIR)
 │   ├── package.json
-│   └── tsconfig.json
+│   ├── tsconfig.json
+│   └── nodemon.json         # Configuración de nodemon
 ├── frontend/
-│   ├── src/               (código fuente de React)
+│   ├── src/                 # Código fuente de React
 │   ├── public/
-│   ├── node_modules/      (dependencias - ignora en Git)
+│   ├── node_modules/        # Dependencias (ignorado por Git)
 │   ├── package.json
 │   └── tsconfig.json
-├── .gitignore             (archivos ignorados por Git - raíz)
-└── README.md              (este manual - raíz)
+├── .gitignore               # Archivos ignorados por Git (raíz)
+└── README.md                # Este manual (raíz)
