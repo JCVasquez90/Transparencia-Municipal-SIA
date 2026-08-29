@@ -1,16 +1,13 @@
 import { Router } from 'express';
+import { crearSolicitudController, listarSolicitudesController } from '../controllers/solicitud.controller.ts';
 
 const router = Router();
 
-// Ruta de prueba para solicitudes
-router.get('/', (req, res) => {
-  res.json({ message: 'Ruta de solicitudes funcionando' });
-});
+// Listar solicitudes (opcionalmente filtradas por ?estado=verde|amarillo|rojo|vencido)
+router.get('/', listarSolicitudesController);
 
-// Ruta para crear una solicitud (ejemplo)
-router.post('/', (req, res) => {
-  res.json({ message: 'Solicitud creada (ejemplo)' });
-});
+// Crear una solicitud
+router.post('/', crearSolicitudController);
 
 // Ruta para obtener una solicitud por ID
 router.get('/:id', (req, res) => {

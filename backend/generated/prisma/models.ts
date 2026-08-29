@@ -8,12 +8,12 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Departamento.js'
-export type * from './models/Usuario.js'
-export type * from './models/ItemTransparencia.js'
-export type * from './models/Solicitud.js'
-export type * from './models/Archivo.js'
-export type * from './models/Log.js'
-export type * from './models/Notificacion.js'
-export type * from './models/CargaMensual.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Departamento.ts'
+export type * from './models/Usuario.ts'
+export type * from './models/ItemTransparencia.ts'
+export type * from './models/Solicitud.ts'
+export type * from './models/Archivo.ts'
+export type * from './models/Log.ts'
+export type * from './models/Notificacion.ts'
+export type * from './models/CargaMensual.ts'
+export type * from './commonInputTypes.ts'
