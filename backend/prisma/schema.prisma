@@ -63,6 +63,7 @@ model Usuario {
   id              Int             @id @default(autoincrement())
   nombre          String
   email           String          @unique
+  passwordHash    String          @map("password_hash")
   rol             RolUsuario      @default(OPERATIVO)
   departamento    Departamento    @relation(fields: [departamentoId], references: [id])
   departamentoId  Int             @map("departamento_id")
@@ -96,15 +97,23 @@ model Solicitud {
   usuarioId      Int              @map("usuario_id")
   departamento   Departamento     @relation(fields: [departamentoId], references: [id])
   departamentoId Int              @map("departamento_id")
+  contenidoRespuesta String?
+  fechaRespuesta     DateTime?
   archivos       Archivo[]
 
   @@map("solicitudes")
+}
+
+enum TipoArchivo {
+  EVIDENCIA_SOLICITUD
+  RESPUESTA
 }
 
 model Archivo {
   id          Int       @id @default(autoincrement())
   nombre      String
   ruta        String
+  tipo        TipoArchivo
   solicitud   Solicitud @relation(fields: [solicitudId], references: [id])
   solicitudId Int       @map("solicitud_id")
 
@@ -116,6 +125,7 @@ model Log {
   usuario   Usuario    @relation(fields: [usuarioId], references: [id])
   usuarioId Int        @map("usuario_id")
   accion    TipoAccion
+  detalle String?
   fechaHora DateTime   @default(now()) @map("fecha_hora")
 
   @@map("logs")

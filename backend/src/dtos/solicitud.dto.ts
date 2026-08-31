@@ -31,3 +31,9 @@ export const listarSolicitudesQuerySchema = z.object({
 });
 
 export type ListarSolicitudesQueryDto = z.infer<typeof listarSolicitudesQuerySchema>;
+
+export const responderSolicitudSchema = z.object({
+  contenidoRespuesta: z.string().trim().min(1, 'El contenido de la respuesta no puede estar vacío'),
+});
+
+export type ResponderSolicitudDto = z.infer<typeof responderSolicitudSchema>;

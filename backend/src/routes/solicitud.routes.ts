@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { crearSolicitudController, listarSolicitudesController } from '../controllers/solicitud.controller.ts';
+import { crearSolicitudController, listarSolicitudesController, obtenerSolicitudPorIdController, responderSolicitudController } from '../controllers/solicitud.controller.ts';
+import { authMiddleware } from '../middlewares/auth.middleware.ts';
 
 const router = Router();
 
@@ -10,8 +11,10 @@ router.get('/', listarSolicitudesController);
 router.post('/', crearSolicitudController);
 
 // Ruta para obtener una solicitud por ID
-router.get('/:id', (req, res) => {
-  res.json({ message: `Detalle de solicitud ${req.params.id}` });
-});
+router.get('/:id', obtenerSolicitudPorIdController);
+
+//Ruta para 
+
+router.patch('/:id/responder', authMiddleware, responderSolicitudController);
 
 export default router;
