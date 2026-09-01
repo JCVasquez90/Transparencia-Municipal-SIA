@@ -100,6 +100,7 @@ model Solicitud {
   contenidoRespuesta String?
   fechaRespuesta     DateTime?
   archivos       Archivo[]
+  resolucionExenta ResolucionExenta?
 
   @@map("solicitudes")
 }
@@ -153,4 +154,14 @@ model CargaMensual {
   usuarioId  Int                   @map("usuario_id")
 
   @@map("cargas_mensuales")
+}
+
+model ResolucionExenta {
+  id            Int       @id @default(autoincrement()) // este ID ES el número correlativo
+  fundamentos   String
+  fechaEmision  DateTime  @default(now()) @map("fecha_emision")
+  solicitud     Solicitud @relation(fields: [solicitudId], references: [id])
+  solicitudId   Int       @unique @map("solicitud_id") // una solicitud = máximo una resolución de prórroga
+
+  @@map("resoluciones_exentas")
 }

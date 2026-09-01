@@ -33,3 +33,15 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     return res.status(401).json({ success: false, message: 'Token inválido o expirado' });
   }
 }
+
+export function requireRole(...rolesPermitidos: string[]) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.usuario) {
+      return res.status(401).json({ success: false, message: 'No autenticado' });
+    }
+    if (!rolesPermitidos.includes(req.usuario.rol)) {
+      return res.status(403).json({ success: false, message: 'No tiene permisos para realizar esta acción' });
+    }
+    next();
+  };
+}

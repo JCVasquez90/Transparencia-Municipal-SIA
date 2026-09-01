@@ -3,9 +3,9 @@ import { sumarDiasHabiles, diasHabilesEntre } from '../utils/fechas.utils.ts';
 import { calcularSemaforo } from './semaforo.service.ts';
 import { TipoAccion } from '../../generated/prisma/enums.ts';
 import type { EstadoSemaforo } from '../utils/fechas.utils.ts';
-import type { CrearSolicitudDto, ResponderSolicitudDto } from '../dtos/solicitud.dto.ts';
+import type { CrearSolicitudDto, ResponderSolicitudDto, SolicitarProrrogaDto } from '../dtos/solicitud.dto.ts';
 
-export async function crearSolicitud(datos: CrearSolicitudDto) {
+export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number) {
   const fechaRecepcion = new Date(datos.fechaRecepcion);
   const plazoLimite = sumarDiasHabiles(fechaRecepcion, 20);
 
@@ -16,14 +16,14 @@ export async function crearSolicitud(datos: CrearSolicitudDto) {
         fechaRecepcion,
         descripcion: datos.descripcion.trim(),
         plazoLimite,
-        usuarioId: datos.usuarioId,
+        usuarioId,
         departamentoId: datos.departamentoId,
       },
     });
 
     await tx.log.create({
       data: {
-        usuarioId: datos.usuarioId,
+        usuarioId,
         accion: TipoAccion.CREAR_SOLICITUD,
       },
     });
@@ -120,4 +120,64 @@ export async function responderSolicitud(id: number, datos: ResponderSolicitudDt
   });
 
   return solicitud;
+}
+
+export async function solicitarProrroga(id: number, datos: SolicitarProrrogaDto, usuarioId: number) {
+  const solicitudActual = await prisma.solicitud.findUnique({ where: { id } });
+
+  if (!solicitudActual) {
+    const error: any = new Error('No existe una solicitud con ese id');
+    error.codigo = 'SOLICITUD_NO_ENCONTRADA';
+    throw error;
+  }
+
+  if (solicitudActual.estado === 'RESPONDIDA') {
+    const error: any = new Error('No se puede solicitar prórroga: la solicitud ya fue respondida');
+    error.codigo = 'SOLICITUD_YA_RESPONDIDA';
+    throw error;
+  }
+
+  if (solicitudActual.estado === 'PRORROGA_SOLICITADA') {
+    const error: any = new Error('Esta solicitud ya tiene una prórroga activa');
+    error.codigo = 'PRORROGA_YA_ACTIVA';
+    throw error;
+  }
+
+  const hoy = new Date();
+  if (hoy > solicitudActual.plazoLimite) {
+    const error: any = new Error('No se puede solicitar prórroga: el plazo ya venció');
+    error.codigo = 'PLAZO_YA_VENCIDO';
+    throw error;
+  }
+
+  const nuevoPlazoLimite = sumarDiasHabiles(solicitudActual.plazoLimite, 10);
+
+  const resultado = await prisma.$transaction(async (tx) => {
+    const resolucion = await tx.resolucionExenta.create({
+      data: {
+        fundamentos: datos.fundamentos,
+        solicitudId: id,
+      },
+    });
+
+    const solicitudActualizada = await tx.solicitud.update({
+      where: { id },
+      data: {
+        estado: 'PRORROGA_SOLICITADA',
+        plazoLimite: nuevoPlazoLimite,
+      },
+    });
+
+    await tx.log.create({
+      data: {
+        usuarioId,
+        accion: TipoAccion.SOLICITAR_PRORROGA,
+        detalle: `Solicitó prórroga de 10 días hábiles (Resolución Exenta N° ${resolucion.id}). Nuevo plazo límite: ${nuevoPlazoLimite.toISOString()}`,
+      },
+    });
+
+    return { solicitud: solicitudActualizada, resolucionExenta: resolucion };
+  });
+
+  return resultado;
 }
