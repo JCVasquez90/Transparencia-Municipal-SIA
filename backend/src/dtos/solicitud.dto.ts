@@ -17,7 +17,6 @@ export const crearSolicitudSchema = z.object({
       message: 'La fecha de recepción no es válida',
     }),
   descripcion: z.string().trim().min(1, 'La descripción es obligatoria'),
-  usuarioId: z.number().int().positive(),
   departamentoId: z.number().int().positive(),
 });
 
@@ -31,3 +30,15 @@ export const listarSolicitudesQuerySchema = z.object({
 });
 
 export type ListarSolicitudesQueryDto = z.infer<typeof listarSolicitudesQuerySchema>;
+
+export const responderSolicitudSchema = z.object({
+  contenidoRespuesta: z.string().trim().min(1, 'El contenido de la respuesta no puede estar vacío'),
+});
+
+export type ResponderSolicitudDto = z.infer<typeof responderSolicitudSchema>;
+
+export const solicitarProrrogaSchema = z.object({
+  fundamentos: z.string().trim().min(1, 'Los fundamentos de la prórroga son obligatorios'),
+});
+
+export type SolicitarProrrogaDto = z.infer<typeof solicitarProrrogaSchema>;
