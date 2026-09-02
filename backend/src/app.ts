@@ -7,6 +7,8 @@ import morgan from 'morgan';
 import solicitudRoutes from './routes/solicitud.routes.ts';
 import usuarioRoutes from './routes/usuario.routes.ts';
 import transparenciaRoutes from './routes/transparencia.routes.ts';
+import authRoutes from './routes/auth.routes.ts';
+import { errorMiddleware } from './middlewares/error.middleware.ts';
 
 //Creación de la aplicación express.
 const app: Application = express();
@@ -48,19 +50,11 @@ app.use('/api/usuarios', usuarioRoutes);
 //Rutas relacionadas con transparencia.
 app.use('/api/transparencia', transparenciaRoutes);
 
+//Rutas relacionadas con autenticacion
+app.use('/api/auth', authRoutes);
+
 //Manejo de errores (middleware error).
 //Middleware para manejar errores no controlados en la aplicación.
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error('Error no controlado:', err);
-//Si el error tiene un statusCode definido, lo usamos, de lo contrario usamos 500 (Internal Server Error).
-    const statusCode = (err as any).statusCode || 500;
-    const message = (err as any).message || 'Error interno del servidor';
-
-    res.status(statusCode).json({
-        success: false,
-        message, 
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-    });
-});
+app.use(errorMiddleware);
 
 export default app;

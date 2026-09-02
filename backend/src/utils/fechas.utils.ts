@@ -36,16 +36,10 @@ export function diasHabilesEntre(desde: Date, hasta: Date): number {
   return dias;
 }
 
+//Clasifica el semáforo de plazos según los días hábiles transcurridos.
+//   VERDE:    0-10 días hábiles
+//   AMARILLO: 11-15 días hábiles
+//   ROJO:     16-20 días hábiles
+//   VENCIDO:  más de 20 días hábiles
 
- //Clasifica el semáforo de plazos según los días hábiles transcurridos.
- //   VERDE:    0-10 días hábiles
- //   AMARILLO: 11-15 días hábiles
- //   ROJO:     16-20 días hábiles
- //  VENCIDO:  más de 20 días hábiles
- 
-export function EstadoSemaforo(diasHabiles: number): 'VERDE' | 'AMARILLO' | 'ROJO' | 'VENCIDO' {
-  if (diasHabiles <= 10) return 'VERDE';
-  if (diasHabiles <= 15) return 'AMARILLO';
-  if (diasHabiles <= 20) return 'ROJO';
-  return 'VENCIDO';
-}
+export type EstadoSemaforo = 'VERDE' | 'AMARILLO' | 'ROJO' | 'VENCIDO';
