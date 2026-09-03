@@ -5,14 +5,39 @@ import { TipoAccion } from '../../generated/prisma/enums.ts';
 import type { EstadoSemaforo } from '../utils/fechas.utils.ts';
 import type { CrearSolicitudDto, ResponderSolicitudDto, SolicitarProrrogaDto } from '../dtos/solicitud.dto.ts';
 
+//Genera folio automatico.
+async function generarFolio(): Promise<string> {
+  const año = new Date().getFullYear();
+  //Obtener la última solicitud para saber el último número de folio
+  const ultimaSolicitud = await prisma.solicitud.findFirst({
+    orderBy: { id: 'desc' },
+    select: { folio: true },
+  });
+
+
+  let numero = 1;
+  if (ultimaSolicitud?.folio) {
+    //Extraer el número del folio y sumarle 1 para generar el nuevo folio
+    const partes = ultimaSolicitud.folio.split('-');
+    const ultimoNumero = parseInt(partes[partes.length - 1], 10);
+    if (!isNaN(ultimoNumero)) {
+      numero = ultimoNumero + 1;
+    }
+  }
+
+  const numeroFormateado = String(numero).padStart(3, '0');
+  return `SIA-${año}-${numeroFormateado}`;
+}
+
 export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number) {
+  const folio = await generarFolio();
   const fechaRecepcion = new Date(datos.fechaRecepcion);
   const plazoLimite = sumarDiasHabiles(fechaRecepcion, 20);
 
   const solicitud = await prisma.$transaction(async (tx) => {
     const nuevaSolicitud = await tx.solicitud.create({
       data: {
-        folio: datos.folio.trim(),
+        folio,
         fechaRecepcion,
         descripcion: datos.descripcion.trim(),
         plazoLimite,
@@ -46,10 +71,10 @@ export async function listarSolicitudes(estadoSemaforo?: EstadoSemaforo) {
 
   const hoy = new Date();
 
-const conSemaforo = solicitudes.map((solicitud) => {
-  const { diasHabiles, semaforo } = calcularSemaforo(solicitud.fechaRecepcion, hoy);
-  return { ...solicitud, diasHabiles, semaforo };
-});
+  const conSemaforo = solicitudes.map((solicitud) => {
+    const { diasHabiles, semaforo } = calcularSemaforo(solicitud.fechaRecepcion, hoy);
+    return { ...solicitud, diasHabiles, semaforo };
+  });
 
   if (estadoSemaforo) {
     return conSemaforo.filter((s) => s.semaforo === estadoSemaforo.toUpperCase());
@@ -71,9 +96,9 @@ export async function obtenerSolicitudPorId(id: number) {
   }
 
   const hoy = new Date();
-const { diasHabiles, semaforo } = calcularSemaforo(solicitud.fechaRecepcion, hoy);
+  const { diasHabiles, semaforo } = calcularSemaforo(solicitud.fechaRecepcion, hoy);
 
-return { ...solicitud, diasHabiles, semaforo };
+  return { ...solicitud, diasHabiles, semaforo };
 }
 
 export async function responderSolicitud(id: number, datos: ResponderSolicitudDto, usuarioId: number) {
