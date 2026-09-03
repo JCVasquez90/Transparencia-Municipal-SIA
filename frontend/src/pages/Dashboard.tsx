@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import{ useNavigate } from 'react-router-dom';
+//import{ useNavigate } from 'react-router-dom';
 import {
-    Container,
     Paper,
     Typography,
     Box,
@@ -14,18 +13,20 @@ import {
     TableHead,
     TableRow,
     Chip,
-    Button,
+    //Button,
     CircularProgress,
     Alert,
     Grid,
 } from '@mui/material';
-import { useAuth } from '../contexts/AuthContext';
+//import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
+import Layout from '../components/common/Layout';
 import { Solicitud } from '../types';
 
+
 const Dashboard: React.FC = () => {
-    const { usuario, logout } = useAuth();
-    const navigate = useNavigate();
+    //const { usuario, logout } = useAuth();
+// const navigate = useNavigate();
     const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
     const [kpis, setKpis] = useState({
         total: 0,
@@ -89,28 +90,9 @@ const Dashboard: React.FC = () => {
     }
 
     return (
-        <Container maxWidth="xl">
-           {/* Encabezado */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                <Typography variant="h3" component="h1">
-                    Dashboard
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => navigate('/solicitudes')}
-                    >Ver todas las solicitudes
-                    </Button>
-                    <Typography variant="body1" color="textSecondary">
-                        {usuario?.nombre} ({usuario?.rol})
-                    </Typography>
-                    <Button variant="outlined" color="secondary" onClick={logout}>
-                        Cerrar sesión
-                    </Button>
-                </Box>
-            </Box>
-
+            <Layout>
+             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              </Box>
             {error && (
                 <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
                     {error}
@@ -215,7 +197,7 @@ const Dashboard: React.FC = () => {
                     </Table>
                 </TableContainer>
             </Paper>
-        </Container>
+        </Layout>
     );
 };
 

@@ -24,7 +24,7 @@ export const solicitudService = {
 
   /**
    * Crea una nueva solicitud
-   * @param datos - Datos de la solicitud (folio, fechaRecepcion, descripcion, departamentoId)
+   * @param datos - Datos de la solicitud (fechaRecepcion, descripcion, departamentoId)
    * @returns La solicitud creada
    */
   async crear(datos: {
@@ -76,5 +76,66 @@ export const solicitudService = {
       porEstado,
       porSemaforo,
     };
+  },
+
+  // ============================================
+  // NUEVOS MÉTODOS PARA EL DETALLE DE SOLICITUD
+  // ============================================
+
+  /**
+   * Obtiene una solicitud por su ID
+   * @param id - ID de la solicitud
+   * @returns La solicitud con sus detalles
+   */
+  async obtenerPorId(id: number): Promise<Solicitud> {
+    const response = await apiClient.get<ApiResponse<Solicitud>>(`/solicitudes/${id}`);
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al obtener la solicitud');
+    }
+
+    if (!response.data.data) {
+      throw new Error('Solicitud no encontrada');
+    }
+
+    return response.data.data;
+  },
+
+  /**
+   * Responde una solicitud
+   * @param id - ID de la solicitud
+   * @param contenidoRespuesta - Contenido de la respuesta
+   * @returns La solicitud actualizada
+   */
+  async responder(id: number, contenidoRespuesta: string): Promise<Solicitud> {
+    const response = await apiClient.patch<ApiResponse<Solicitud>>(
+      `/solicitudes/${id}/responder`,
+      { contenidoRespuesta }
+    );
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al responder la solicitud');
+    }
+
+    return response.data.data!;
+  },
+
+  /**
+   * Solicita una prórroga para una solicitud
+   * @param id - ID de la solicitud
+   * @param fundamentos - Fundamentos de la prórroga
+   * @returns La solicitud actualizada
+   */
+  async solicitarProrroga(id: number, fundamentos: string): Promise<Solicitud> {
+    const response = await apiClient.post<ApiResponse<Solicitud>>(
+      `/solicitudes/${id}/prorroga`,
+      { fundamentos }
+    );
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al solicitar la prórroga');
+    }
+
+    return response.data.data!;
   },
 };

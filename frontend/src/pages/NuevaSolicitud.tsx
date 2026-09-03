@@ -15,6 +15,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
 import apiClient from '../api/client';
 import { Departamento } from '../types';
+import Layout from '../components/common/Layout';
 
 const NuevaSolicitud: React.FC = () => {
   const { usuario } = useAuth();
@@ -92,7 +93,7 @@ const NuevaSolicitud: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+    <Layout>
       <Paper sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Nueva solicitud de información
@@ -167,7 +168,7 @@ const NuevaSolicitud: React.FC = () => {
           </Box>
         </form>
       </Paper>
-    </Container>
+    </Layout>
   );
 };
 

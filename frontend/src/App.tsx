@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Solicitudes from './pages/Solicitudes';
 import NuevaSolicitud from './pages/NuevaSolicitud';
+import SolicitudDetalle from './pages/SolicitudDetalle';
 //import './App.css';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -45,6 +46,14 @@ function App() {
           element={
             <PrivateRoute>
               <NuevaSolicitud />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/solicitudes/:id"
+          element={
+            <PrivateRoute>
+              <SolicitudDetalle />
             </PrivateRoute>
           }
         />

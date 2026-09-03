@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
 import { Solicitud } from '../types';
+import Layout from '../components/common/Layout';
 
 // ============================================
 // COMPONENTE SOLICITUDES
@@ -49,6 +50,7 @@ const Solicitudes: React.FC = () => {
     { value: 'ROJO', label: '🔴 Rojo' },
     { value: 'VENCIDO', label: '⚫ Vencido' },
   ];
+  
 
   // ============================================
   // 2. CARGAR DATOS
@@ -108,22 +110,10 @@ const Solicitudes: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl">
-      {/* Encabezado */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h3" component="h1">
-          Solicitudes de información
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('/solicitudes/nueva')}
-          disabled={usuario?.rol !== 'OPERATIVO'}
-        > Nueva solicitud
-        </Button>
-      </Box>
-
-      {/* Filtros */}
+    <Layout>
+             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              </Box>
+          {/* Filtros */}
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <TextField
           select
@@ -141,6 +131,13 @@ const Solicitudes: React.FC = () => {
         </TextField>
         <Button variant="outlined" onClick={cargarSolicitudes} startIcon={<Refresh />}>
           Actualizar
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/solicitudes/nueva')}
+          disabled={usuario?.rol !== 'OPERATIVO'}
+        > Nueva solicitud
         </Button>
       </Box>
 
@@ -213,8 +210,8 @@ const Solicitudes: React.FC = () => {
           </Table>
         </TableContainer>
       </Paper>
-    </Container>
-  );
+    </Layout>
+  ); 
 };
 
 export default Solicitudes;
