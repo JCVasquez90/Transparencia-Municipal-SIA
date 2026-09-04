@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotification } from '../contexts/NotificationContext';
 import { solicitudService } from '../services/solicitudService';
 import { Solicitud } from '../types';
 import Layout from '../components/common/Layout';
@@ -32,6 +33,7 @@ const SolicitudDetalle: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { usuario } = useAuth();
+  const { showNotification } = useNotification();
 
   const [solicitud, setSolicitud] = useState<Solicitud | null>(null);
   const [loading, setLoading] = useState(true);
@@ -83,9 +85,11 @@ const SolicitudDetalle: React.FC = () => {
       const data = await solicitudService.obtenerPorId(solicitud.id);
       setSolicitud(data);
       setContenidoRespuesta('');
-      alert('✅ Solicitud respondida correctamente');
+      showNotification('Respuesta enviada correctamente', 'success');
     } catch (err: any) {
-      setError(err.message || 'Error al responder la solicitud');
+      const mensaje = err.response?.data?.message || err.message || 'Error al responder la solicitud';
+      showNotification(mensaje, 'error');
+      setError(mensaje);
     } finally {
       setRespondiendo(false);
     }
@@ -98,13 +102,14 @@ const SolicitudDetalle: React.FC = () => {
 
     try {
       await solicitudService.solicitarProrroga(solicitud.id, fundamentos);
-      // Recargar la solicitud para mostrar los cambios
       const data = await solicitudService.obtenerPorId(solicitud.id);
       setSolicitud(data);
       setFundamentos('');
-      alert('✅ Prórroga solicitada correctamente');
+      showNotification('Prórroga solicitada correctamente', 'success');
     } catch (err: any) {
-      setError(err.message || 'Error al solicitar la prórroga');
+      const mensaje = err.response?.data?.message || err.message || 'Error al solicitar la prórroga';
+      showNotification(mensaje, 'error');
+      setError(mensaje);
     } finally {
       setSolicitandoProrroga(false);
     }

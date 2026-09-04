@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Container,
   Paper,
-  Typography,
   Box,
   Table,
   TableBody,
@@ -18,7 +16,7 @@ import {
   MenuItem,
   IconButton,
 } from '@mui/material';
-import { Visibility, Refresh } from '@mui/icons-material';
+import { Visibility, Refresh, ArrowUpward, ArrowDownward } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
@@ -41,6 +39,7 @@ const Solicitudes: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<string>('');
+  const [ordenAscendente, setOrdenAscendente] = useState(false); // ← NUEVO: control de orden
 
   // Opciones para el filtro de semáforo
   const opcionesSemaforo = [
@@ -50,13 +49,12 @@ const Solicitudes: React.FC = () => {
     { value: 'ROJO', label: '🔴 Rojo' },
     { value: 'VENCIDO', label: '⚫ Vencido' },
   ];
-  
 
   // ============================================
   // 2. CARGAR DATOS
   // ============================================
 
-  const cargarSolicitudes = async () => {
+  const cargarSolicitudes = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -67,14 +65,30 @@ const Solicitudes: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filtroEstado]);
 
   useEffect(() => {
     cargarSolicitudes();
-  }, [filtroEstado]);
+  }, [cargarSolicitudes]);
 
   // ============================================
-  // 3. RENDERIZADO DE SEMÁFORO
+  // 3. FUNCIÓN PARA ORDENAR SOLICITUDES POR FOLIO
+  // ============================================
+
+  const solicitudesOrdenadas = () => {
+    const copia = [...solicitudes];
+    return copia.sort((a, b) => {
+      // Extraer el número del folio (ej. "SIA-2026-001" → 1)
+      const numA = parseInt(a.folio.split('-')[2], 10);
+      const numB = parseInt(b.folio.split('-')[2], 10);
+      const valorA = isNaN(numA) ? a.id : numA;
+      const valorB = isNaN(numB) ? b.id : numB;
+      return ordenAscendente ? valorA - valorB : valorB - valorA;
+    });
+  };
+
+  // ============================================
+  // 4. RENDERIZADO DE SEMÁFORO
   // ============================================
 
   const renderSemaforo = (semaforo?: string) => {
@@ -98,7 +112,7 @@ const Solicitudes: React.FC = () => {
   };
 
   // ============================================
-  // 4. RENDERIZADO PRINCIPAL
+  // 5. RENDERIZADO PRINCIPAL
   // ============================================
 
   if (loading) {
@@ -111,10 +125,11 @@ const Solicitudes: React.FC = () => {
 
   return (
     <Layout>
-             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              </Box>
-          {/* Filtros */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+      </Box>
+
+      {/* Filtros y controles */}
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
         <TextField
           select
           label="Filtrar por semáforo"
@@ -129,15 +144,24 @@ const Solicitudes: React.FC = () => {
             </MenuItem>
           ))}
         </TextField>
+        {usuario?.rol === 'OPERATIVO' &&(
+          <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate('/solicitudes/nueva')}
+        > Nueva solicitud
+        </Button>
+        )}
         <Button variant="outlined" onClick={cargarSolicitudes} startIcon={<Refresh />}>
           Actualizar
         </Button>
         <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('/solicitudes/nueva')}
-          disabled={usuario?.rol !== 'OPERATIVO'}
-        > Nueva solicitud
+          variant="outlined"
+          size="small"
+          onClick={() => setOrdenAscendente(!ordenAscendente)}
+          startIcon={ordenAscendente ? <ArrowUpward /> : <ArrowDownward />}
+        >
+          {ordenAscendente ? 'Ascendente' : 'Descendente'}
         </Button>
       </Box>
 
@@ -172,7 +196,7 @@ const Solicitudes: React.FC = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                solicitudes.map((solicitud) => (
+                solicitudesOrdenadas().map((solicitud) => (
                   <TableRow key={solicitud.id}>
                     <TableCell>{solicitud.folio}</TableCell>
                     <TableCell>{solicitud.descripcion.substring(0, 60)}...</TableCell>
@@ -211,7 +235,7 @@ const Solicitudes: React.FC = () => {
         </TableContainer>
       </Paper>
     </Layout>
-  ); 
+  );
 };
 
 export default Solicitudes;

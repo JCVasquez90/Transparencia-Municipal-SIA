@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotification } from '../contexts/NotificationContext';
 import { solicitudService } from '../services/solicitudService';
 import apiClient from '../api/client';
 import { Departamento } from '../types';
@@ -19,6 +20,7 @@ import Layout from '../components/common/Layout';
 
 const NuevaSolicitud: React.FC = () => {
   const { usuario } = useAuth();
+  const { showNotification } = useNotification();
   const navigate = useNavigate();
 
   // Estados del formulario
@@ -65,9 +67,12 @@ const NuevaSolicitud: React.FC = () => {
         descripcion,
         departamentoId,
       });
+      showNotification('Solicitud creada exitosamente', 'success');
       navigate('/solicitudes');
     } catch (err: any) {
-      setError(err.message || 'Error al crear la solicitud');
+      const mensaje = err.response?.data?.message || err.message || 'Error al crear la solicitud'; 
+      showNotification(mensaje, 'error');
+      setError(mensaje);
     } finally {
       setLoading(false);
     }
