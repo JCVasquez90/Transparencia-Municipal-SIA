@@ -69,7 +69,7 @@ const Login: React.FC = () => {
     <Container component="main" maxWidth="xs">
       <Box
         sx={{
-          minHeight: '100vh',
+          minHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -149,8 +149,8 @@ const Login: React.FC = () => {
         </Paper>
       </Box>
     </Container>
-  );
-};
+  );  
+};      
 
 export default Login;
 
