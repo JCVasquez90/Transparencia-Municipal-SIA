@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const crearSolicitudSchema = z.object({
-  folio: z.string().trim().min(1, 'El folio es obligatorio'),
   fechaRecepcion: z.string()
     .min(1, 'La fecha de recepción es obligatoria')
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'La fecha debe tener el formato YYYY-MM-DD')

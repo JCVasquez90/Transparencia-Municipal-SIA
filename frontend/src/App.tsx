@@ -1,25 +1,74 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Solicitudes from './pages/Solicitudes';
+import NuevaSolicitud from './pages/NuevaSolicitud';
+import SolicitudDetalle from './pages/SolicitudDetalle';
+//import './App.css';
+
+const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+};
 
 function App() {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/solicitudes"
+          element={
+            <PrivateRoute>
+              <Solicitudes />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/solicitudes/nueva"
+          element={
+            <PrivateRoute>
+              <NuevaSolicitud />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/solicitudes/:id"
+          element={
+            <PrivateRoute>
+              <SolicitudDetalle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
