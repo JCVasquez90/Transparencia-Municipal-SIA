@@ -45,6 +45,7 @@ enum TipoAccion {
   EDITAR_USUARIO
   PUBLICAR_INFORMACION
   INICIAR_SESION
+  SUBIR_ARCHIVO
 }
 
 // ============================================

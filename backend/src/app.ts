@@ -10,6 +10,7 @@ import transparenciaRoutes from './routes/transparencia.routes.ts';
 import authRoutes from './routes/auth.routes.ts';
 import { errorMiddleware } from './middlewares/error.middleware.ts';
 import departamentoRoutes from './routes/departamento.routes.ts';
+import archivoRoutes from './routes/archivo.routes.ts';
 
 //Creación de la aplicación express.
 const app: Application = express();
@@ -60,5 +61,8 @@ app.use(errorMiddleware);
 
 //Rutas relacionadas con departamentos.
 app.use('/api/departamentos', departamentoRoutes);
+
+//Ruta relacionada con archivos
+app.use('/api/archivos', archivoRoutes);
 
 export default app;
