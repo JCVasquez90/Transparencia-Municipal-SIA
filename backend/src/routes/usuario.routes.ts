@@ -1,20 +1,12 @@
 import { Router } from 'express';
+import { listarUsuariosController, crearUsuarioController, editarUsuarioController } from '../controllers/usuario.controller.ts';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
 
 const router = Router();
 
-// Ruta de prueba para usuarios
-router.get('/', (req, res) => {
-  res.json({ message: 'Ruta de usuarios funcionando' });
-});
-
-// Ruta para crear un usuario (ejemplo)
-router.post('/', (req, res) => {
-  res.json({ message: 'Usuario creado (ejemplo)' });
-});
-
-// Ruta para obtener un usuario por ID
-router.get('/:id', (req, res) => {
-  res.json({ message: `Detalle de usuario ${req.params.id}` });
-});
+// Listar, crear y editar usuarios: solo accesible para el rol ENLACE.
+router.get('/', authMiddleware, requireRole('ENLACE'), listarUsuariosController);
+router.post('/', authMiddleware, requireRole('ENLACE'), crearUsuarioController);
+router.patch('/:id', authMiddleware, requireRole('ENLACE'), editarUsuarioController);
 
 export default router;
