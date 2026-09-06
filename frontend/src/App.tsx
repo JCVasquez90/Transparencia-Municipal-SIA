@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import Solicitudes from './pages/Solicitudes';
 import NuevaSolicitud from './pages/NuevaSolicitud';
 import SolicitudDetalle from './pages/SolicitudDetalle';
+import TransparenciaActiva from './pages/TransparenciaActiva';
+import DetalleCarga from './pages/DetalleCarga';
 //import './App.css';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -54,6 +56,22 @@ function App() {
           element={
             <PrivateRoute>
               <SolicitudDetalle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transparencia"
+          element={
+            <PrivateRoute>
+              <TransparenciaActiva />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/transparencia/carga/:id"
+          element={
+            <PrivateRoute>
+              <DetalleCarga />
             </PrivateRoute>
           }
         />

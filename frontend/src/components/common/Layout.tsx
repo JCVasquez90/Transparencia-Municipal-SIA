@@ -56,8 +56,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* Logo / Título */}
           <Typography
             variant="h6"
-            component={Link}
-            to="/dashboard"
             sx={{
               flexGrow: 0,
               textDecoration: 'none',
@@ -66,7 +64,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               mr: 4,
             }}
           >
-            Transparencia
+            Transparencia Municipal
           </Typography>
 
           {/* Enlaces de navegación */}
@@ -94,6 +92,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               }}
             >
               Solicitudes
+            </Button>
+            <Button
+              component={Link}
+              to="/transparencia"
+              color="inherit"
+              sx={{
+                fontWeight: isActive('/transparencia') ? 'bold' : 'normal',
+                borderBottom: isActive('/transparencia') ? '2px solid white' : 'none',
+                borderRadius: 0,
+              }}
+            >
+              Transparencia
             </Button>
           </Box>
 
@@ -134,7 +144,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </Container>
 
-      {/* Footer (opcional) */}
+      {/* Footer*/}
       <Box
         component="footer"
         sx={{

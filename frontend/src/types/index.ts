@@ -70,4 +70,30 @@ export interface SolicitarProrrogaFormValues {
   fundamentos: string;
 }
 
+// ============================================
+// TIPOS PARA TRANSPARENCIA ACTIVA
+// ============================================
+
+export interface ItemTransparencia{
+  id: number;
+  nombre: string;
+  descripcion: string;
+  departamentoResponsableId: number;
+  departamentoResponsable?: Departamento;
+}
+
+export interface CargaMensual{
+  id: number;
+  itemId: number;
+  mes: number;
+  anio: number;
+  estado: 'PENDIENTE' | 'APROBADA' | 'PUBLICADA' | 'RECHAZADA';
+  fechaCarga: string;
+  usuarioId: number;
+  usuario?: Usuario;
+  item?: ItemTransparencia;
+}
+
+
+
 export {};

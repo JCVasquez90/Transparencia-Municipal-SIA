@@ -133,8 +133,10 @@ const Dashboard: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+          Dashboard
+        </Typography>
       </Box>
-
       {error && (
         <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
           {error}
@@ -234,8 +236,8 @@ const Dashboard: React.FC = () => {
                           solicitud.estado === 'RESPONDIDA'
                             ? 'success'
                             : solicitud.estado === 'VENCIDA' || solicitud.estado === 'PRORROGA_SOLICITADA'
-                            ? 'warning'
-                            : 'primary'
+                              ? 'warning'
+                              : 'primary'
                         }
                       />
                     </TableCell>
