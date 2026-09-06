@@ -100,7 +100,7 @@ const NuevaSolicitud: React.FC = () => {
   return (
     <Layout>
       <Paper sx={{ p: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
           Nueva solicitud de información
         </Typography>
 

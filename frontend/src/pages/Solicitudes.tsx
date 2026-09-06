@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Paper,
+  Typography,
   Box,
   Table,
   TableBody,
@@ -126,6 +127,17 @@ const Solicitudes: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }} >
+          Solicitudes
+        </Typography>
+        {usuario?.rol === 'OPERATIVO' && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate('/solicitudes/nueva')}
+          > Nueva solicitud
+          </Button>
+        )}
       </Box>
 
       {/* Filtros y controles */}
@@ -144,14 +156,6 @@ const Solicitudes: React.FC = () => {
             </MenuItem>
           ))}
         </TextField>
-        {usuario?.rol === 'OPERATIVO' &&(
-          <Button
-          variant="contained"
-          color="primary"
-          onClick={() => navigate('/solicitudes/nueva')}
-        > Nueva solicitud
-        </Button>
-        )}
         <Button variant="outlined" onClick={cargarSolicitudes} startIcon={<Refresh />}>
           Actualizar
         </Button>
@@ -208,8 +212,8 @@ const Solicitudes: React.FC = () => {
                           solicitud.estado === 'RESPONDIDA'
                             ? 'success'
                             : solicitud.estado === 'VENCIDA' || solicitud.estado === 'PRORROGA_SOLICITADA'
-                            ? 'warning'
-                            : 'primary'
+                              ? 'warning'
+                              : 'primary'
                         }
                       />
                     </TableCell>

@@ -87,14 +87,9 @@ const Login: React.FC = () => {
           }}
         >
           {/* Título */}
-          <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
+          <Typography component="h1" variant="h5" sx={{ mb: 5, fontWeight: 'bold' }}>
             Transparencia Municipal
           </Typography>
-
-          <Typography component="h2" variant="subtitle1" sx={{ mb: 3 }}>
-            Iniciar Sesión
-          </Typography>
-
           {/* Mensaje de error */}
           {error && (
             <Alert severity="error" sx={{ width: '100%', mb: 2 }}>

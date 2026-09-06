@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes.ts';
 import { errorMiddleware } from './middlewares/error.middleware.ts';
 import departamentoRoutes from './routes/departamento.routes.ts';
 
+
 //Creación de la aplicación express.
 const app: Application = express();
 
