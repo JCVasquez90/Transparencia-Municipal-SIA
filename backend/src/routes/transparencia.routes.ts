@@ -1,20 +1,43 @@
 import { Router } from 'express';
+import {
+  listarItems,
+  listarCargas,
+  crearCarga,
+  aprobarCarga,
+  rechazarCarga,
+  publicarCarga,
+} from '../controllers/transparencia.controller.ts';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
 
 const router = Router();
 
-// Ruta de prueba para transparencia activa
-router.get('/', (req, res) => {
-  res.json({ message: 'Ruta de transparencia activa funcionando' });
-});
+// Todas las rutas requieren autenticación
+router.use(authMiddleware);
 
-// Ruta para obtener cargas mensuales (ejemplo)
-router.get('/cargas', (req, res) => {
-  res.json({ message: 'Lista de cargas mensuales (ejemplo)' });
-});
+// ============================================
+// ÍTEMS DE TRANSPARENCIA
+// ============================================
 
-// Ruta para crear una carga mensual
-router.post('/cargas', (req, res) => {
-  res.json({ message: 'Carga mensual creada (ejemplo)' });
-});
+// GET /api/transparencia/items - Listar todos los ítems
+router.get('/items', listarItems);
+
+// ============================================
+// CARGAS MENSUALES
+// ============================================
+
+// GET /api/transparencia/cargas/:itemId - Listar cargas de un ítem
+router.get('/cargas/:itemId', listarCargas);
+
+// POST /api/transparencia/cargas - Crear una nueva carga (solo OPERATIVO)
+router.post('/cargas', requireRole('OPERATIVO'), crearCarga);
+
+// PATCH /api/transparencia/cargas/:id/aprobar - Aprobar una carga (solo DIRECTOR)
+router.patch('/cargas/:id/aprobar', requireRole('DIRECTOR'), aprobarCarga);
+
+// PATCH /api/transparencia/cargas/:id/rechazar - Rechazar una carga (solo DIRECTOR)
+router.patch('/cargas/:id/rechazar', requireRole('DIRECTOR'), rechazarCarga);
+
+// PATCH /api/transparencia/cargas/:id/publicar - Publicar una carga (solo ENLACE)
+router.patch('/cargas/:id/publicar', requireRole('ENLACE'), publicarCarga);
 
 export default router;

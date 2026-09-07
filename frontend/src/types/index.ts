@@ -85,7 +85,7 @@ export interface Log {
     | 'EDITAR_USUARIO'
     | 'SUBIR_ARCHIVO';
   detalle: string | null;
-  fechaHora: string; 
+  fechaHora: string;
   usuario: {
     id: number;
     nombre: string;
@@ -93,7 +93,6 @@ export interface Log {
     rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
   };
 }
-
 // ============================================
 // TIPOS DE ARCHIVO
 // ============================================
@@ -104,5 +103,24 @@ export interface Archivo {
   tipo: 'EVIDENCIA_SOLICITUD' | 'RESPUESTA';
   solicitudId: number;
 }
-
-export {};
+// ============================================
+// TIPOS PARA TRANSPARENCIA ACTIVA
+// ============================================
+export interface ItemTransparencia {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  departamentoResponsableId: number;
+  departamentoResponsable?: Departamento;
+}
+export interface CargaMensual {
+  id: number;
+  itemId: number;
+  mes: number;
+  anio: number;
+  estado: 'PENDIENTE' | 'APROBADA' | 'PUBLICADA' | 'RECHAZADA';
+  fechaCarga: string;
+  usuarioId: number;
+  usuario?: Usuario;
+  item?: ItemTransparencia;
+}

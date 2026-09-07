@@ -230,7 +230,7 @@ const SolicitudDetalle: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
           Solicitud {solicitud.folio}
         </Typography>
         <Button variant="outlined" onClick={() => navigate('/solicitudes')}>

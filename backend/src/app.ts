@@ -13,6 +13,7 @@ import departamentoRoutes from './routes/departamento.routes.ts';
 import archivoRoutes from './routes/archivo.routes.ts';
 import logRoutes from './routes/log.routes.ts';
 
+
 //Creación de la aplicación express.
 const app: Application = express();
 
