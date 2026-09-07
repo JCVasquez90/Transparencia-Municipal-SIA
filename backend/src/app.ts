@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes.ts';
 import { errorMiddleware } from './middlewares/error.middleware.ts';
 import departamentoRoutes from './routes/departamento.routes.ts';
 import archivoRoutes from './routes/archivo.routes.ts';
+import logRoutes from './routes/log.routes.ts';
 
 //Creación de la aplicación express.
 const app: Application = express();
@@ -64,5 +65,8 @@ app.use('/api/departamentos', departamentoRoutes);
 
 //Ruta relacionada con archivos
 app.use('/api/archivos', archivoRoutes);
+
+//Ruta relacionada con logs
+app.use('/api/logs', logRoutes);
 
 export default app;
