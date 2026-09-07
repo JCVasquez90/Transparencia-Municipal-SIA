@@ -8,6 +8,7 @@ export interface Usuario {
   email: string;
   rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
   departamentoId: number;
+  departamento?: Departamento;
 }
 
 // ============================================
@@ -68,6 +69,40 @@ export interface ResponderSolicitudFormValues {
 
 export interface SolicitarProrrogaFormValues {
   fundamentos: string;
+}
+
+// ============================================
+// TIPOS DE LOG (AUDITORÍA)
+// ============================================
+export interface Log {
+  id: number;
+  usuarioId: number;
+  accion:
+    | 'CREAR_SOLICITUD'
+    | 'RESPONDER_SOLICITUD'
+    | 'SOLICITAR_PRORROGA'
+    | 'CREAR_USUARIO'
+    | 'EDITAR_USUARIO'
+    | 'SUBIR_ARCHIVO';
+  detalle: string | null;
+  fechaHora: string; 
+  usuario: {
+    id: number;
+    nombre: string;
+    email: string;
+    rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
+  };
+}
+
+// ============================================
+// TIPOS DE ARCHIVO
+// ============================================
+export interface Archivo {
+  id: number;
+  nombre: string;
+  ruta: string;
+  tipo: 'EVIDENCIA_SOLICITUD' | 'RESPUESTA';
+  solicitudId: number;
 }
 
 export {};
