@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { listarArchivosPorSolicitud, subirArchivo } from '../services/archivo.service.ts';
+import { listarArchivosPorSolicitud, subirArchivo, obtenerArchivoPorId } from '../services/archivo.service.ts';
 import { subirArchivoSchema } from '../dtos/archivo.dto.ts';
+import path from 'path';
 
 export async function listarArchivosController(req: Request, res: Response) {
   const solicitudId = Number(req.params.solicitudId);
@@ -52,5 +53,22 @@ export async function subirArchivoController(req: Request, res: Response) {
   return res.status(400).json({ success: false, message: error.message });
 }
     return res.status(500).json({ success: false, message: 'Error al subir el archivo', error: error?.message });
+  }
+}
+
+export async function descargarArchivoController(req: Request, res: Response) {
+  const archivoId = Number(req.params.id);
+  if (isNaN(archivoId)) {
+    return res.status(400).json({ success: false, message: 'El id debe ser un número' });
+  }
+  try {
+    const archivo = await obtenerArchivoPorId(archivoId);
+    const rutaCompleta = path.join(process.cwd(), 'uploads', archivo.ruta);
+    return res.download(rutaCompleta, archivo.nombre);
+  } catch (error: any) {
+    if (error?.codigo === 'ARCHIVO_NO_ENCONTRADO') {
+      return res.status(404).json({ success: false, message: error.message });
+    }
+    return res.status(500).json({ success: false, message: 'Error al descargar el archivo', error: error?.message });
   }
 }
