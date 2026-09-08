@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import {
   Paper,
   Typography,
@@ -19,7 +19,7 @@ import {
   Grid,
 } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
-import { useAuth } from '../contexts/AuthContext';
+//import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
 import { Solicitud } from '../types';
 import Layout from '../components/common/Layout';
@@ -42,6 +42,10 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ordenAscendente, setOrdenAscendente] = useState(false); // ← Nuevo estado
+  const [kpisAvanzados, setKpisAvanzados] = useState<{
+    promedioPorDepartamento: { departamento: string; promedio: number }[];
+    tasaCumplimiento: number;
+  } | null>(null);
 
   // ============================================
   // 2. CARGAR DATOS
@@ -55,12 +59,14 @@ const Dashboard: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const [kpisData, solicitudesData] = await Promise.all([
+      const [kpisData, solicitudesData, kpisAvanzadosData] = await Promise.all([
         solicitudService.obtenerKPIs(),
         solicitudService.listar(),
+        solicitudService.obtenerKPIsAvanzados(),
       ]);
       setKpis(kpisData);
       setSolicitudes(solicitudesData);
+      setKpisAvanzados(kpisAvanzadosData);
     } catch (err: any) {
       setError(err.message || 'Error al cargar los datos');
     } finally {
@@ -189,6 +195,41 @@ const Dashboard: React.FC = () => {
         </Grid>
       </Grid>
 
+      {/* Nuevas tarjetas de KPIs */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Tasa de cumplimiento
+              </Typography>
+              <Typography variant="h4">
+                {kpisAvanzados?.tasaCumplimiento ?? 0}%
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+          <Card>
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                Mejor departamento
+              </Typography>
+              <Typography variant="h6">
+                {kpisAvanzados?.promedioPorDepartamento.length
+                  ? kpisAvanzados.promedioPorDepartamento.reduce((a, b) => a.promedio < b.promedio ? a : b).departamento
+                  : '-'}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {kpisAvanzados?.promedioPorDepartamento.length
+                  ? `${kpisAvanzados.promedioPorDepartamento.reduce((a, b) => a.promedio < b.promedio ? a : b).promedio} días`
+                  : ''}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      
       {/* Tabla de solicitudes con ordenamiento */}
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

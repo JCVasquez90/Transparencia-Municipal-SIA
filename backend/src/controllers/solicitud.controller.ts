@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { crearSolicitud, listarSolicitudes, obtenerSolicitudPorId, responderSolicitud, solicitarProrroga } from '../services/solicitud.service.ts';
+import { crearSolicitud, listarSolicitudes, obtenerSolicitudPorId, responderSolicitud, solicitarProrroga, obtenerKPIs } from '../services/solicitud.service.ts';
 import { crearSolicitudSchema, listarSolicitudesQuerySchema, responderSolicitudSchema, solicitarProrrogaSchema } from '../dtos/solicitud.dto.ts';
 
 export async function crearSolicitudController(req: Request, res: Response) {
@@ -18,7 +18,8 @@ export async function crearSolicitudController(req: Request, res: Response) {
     return res.status(201).json({ success: true, data: solicitud });
   } catch (error: any) {
     if (error?.code === 'P2002') {
-      return res.status(409).json({ success: false, message: `Ya existe una solicitud con el folio "${parsed.data.folio}"` });
+      // El folio se genera automáticamente, pero si hay duplicado (muy raro)
+      return res.status(409).json({ success: false, message: 'El folio generado automáticamente ya existe. Intente nuevamente.' });
     }
     if (error?.code === 'P2003') {
       return res.status(400).json({ success: false, message: 'El departamentoId indicado no existe' });
@@ -123,5 +124,14 @@ export async function solicitarProrrogaController(req: Request, res: Response) {
       return res.status(409).json({ success: false, message: error.message });
     }
     return res.status(500).json({ success: false, message: 'Error al solicitar la prórroga', error: error?.message });
+  }
+}
+
+export async function obtenerKPIsController(req: Request, res: Response) {
+  try {
+    const kpis = await obtenerKPIs();
+    return res.status(200).json({ success: true, data: kpis });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, message: 'Error al obtener los KPIs', error: error?.message });
   }
 }

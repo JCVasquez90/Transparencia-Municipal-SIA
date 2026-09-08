@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../index.ts';
+import { generarAlertasTransparencia } from '../services/alerta.service.ts';
 
 // ============================================
 // LISTAR ÍTEMS DE TRANSPARENCIA
@@ -220,6 +221,27 @@ export async function publicarCarga(req: Request, res: Response) {
     return res.status(500).json({
       success: false,
       message: 'Error al publicar la carga',
+      error: error?.message,
+    });
+  }
+}
+
+// ============================================
+// CONTROLADOR PARA EJECUTAR ALERTAS
+// ============================================
+
+export async function generarAlertasController(req: Request, res: Response) {
+  try {
+    const alertas = await generarAlertasTransparencia();
+    return res.status(200).json({
+      success: true,
+      message: `Se generaron ${alertas.length} alertas`,
+      data: alertas,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error al generar las alertas',
       error: error?.message,
     });
   }

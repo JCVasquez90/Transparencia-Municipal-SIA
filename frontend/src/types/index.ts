@@ -94,6 +94,17 @@ export interface CargaMensual{
   item?: ItemTransparencia;
 }
 
+// ============================================
+// TIPOS PARA NOTIFICACIONES
+// ============================================
+
+export interface Notificacion {
+  id: number;
+  usuarioId: number;
+  mensaje: string;
+  leida: boolean;
+  createdAt: string;
+}
 
 
 export {};

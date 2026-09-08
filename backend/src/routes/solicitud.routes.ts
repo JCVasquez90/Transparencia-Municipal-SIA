@@ -1,23 +1,40 @@
 import { Router } from 'express';
-import { crearSolicitudController, listarSolicitudesController, obtenerSolicitudPorIdController, responderSolicitudController, solicitarProrrogaController } from '../controllers/solicitud.controller.ts';
+import { 
+  crearSolicitudController, 
+  listarSolicitudesController, 
+  obtenerSolicitudPorIdController, 
+  responderSolicitudController, 
+  solicitarProrrogaController,
+  obtenerKPIsController  // ← Importar el nuevo controlador
+} from '../controllers/solicitud.controller.ts';
 import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
 
 const router = Router();
 
-// Listar solicitudes (opcionalmente filtradas por ?estado=verde|amarillo|rojo|vencido)
+// ============================================
+// RUTAS ESPECÍFICAS (DEBEN IR PRIMERO)
+// ============================================
+
+// 1. KPIs - DEBE IR ANTES DE /:id
+router.get('/kpis', authMiddleware, requireRole('OPERATIVO', 'DIRECTOR', 'ENLACE'), obtenerKPIsController);
+
+// 2. Listar solicitudes (con filtros)
 router.get('/', authMiddleware, requireRole('OPERATIVO', 'DIRECTOR', 'ENLACE'), listarSolicitudesController);
 
-// Crear una solicitud
+// 3. Crear una solicitud
 router.post('/', authMiddleware, requireRole('OPERATIVO'), crearSolicitudController);
 
-// Ruta para obtener una solicitud por ID
+// ============================================
+// RUTAS DINÁMICAS (CON :ID) - DEBEN IR DESPUÉS
+// ============================================
+
+// 4. Obtener una solicitud por ID
 router.get('/:id', authMiddleware, requireRole('OPERATIVO', 'DIRECTOR', 'ENLACE'), obtenerSolicitudPorIdController);
 
-//Ruta para responder solicitud
-
+// 5. Responder una solicitud
 router.patch('/:id/responder', authMiddleware, requireRole('DIRECTOR'), responderSolicitudController);
 
-// Ruta para solicitar prorroga
+// 6. Solicitar prórroga
 router.post('/:id/prorroga', authMiddleware, requireRole('ENLACE'), solicitarProrrogaController);
 
 export default router;

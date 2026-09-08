@@ -2,6 +2,7 @@ import 'dotenv/config';
 import app from './app.ts';
 import { PrismaClient } from '../generated/prisma/client.ts';
 import { PrismaPg } from '@prisma/adapter-pg';
+import './cron/alerta.cron.ts';
 
 // Puerto en el que correrá el servidor.
 const PORT = process.env.PORT || 5000;
