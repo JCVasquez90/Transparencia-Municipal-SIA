@@ -34,6 +34,70 @@ Proyecto académico — Instituto Profesional San Sebastián.
 
 ---
 
+---
+
+## 🐳 Levantar el proyecto con Docker (recomendado)
+
+Esta es la forma más rápida de levantar el backend y la base de datos, sin instalar PostgreSQL localmente.
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/JCVasquez90/Transparencia-Municipal-SIA.git
+cd Transparencia-Municipal-SIA
+```
+
+### 2. Crear el archivo de variables de entorno
+
+Copia el archivo de ejemplo y complétalo con tus propios valores:
+
+```bash
+cp .env.example .env
+```
+
+Edita `.env` y reemplaza `tu_usuario`, `tu_contraseña` y el secreto de JWT por valores reales. Puedes generar un `JWT_SECRET` seguro con:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 3. Levantar backend + base de datos con un solo comando
+
+```bash
+docker compose up --build
+```
+
+Esto construye la imagen del backend, descarga la imagen de PostgreSQL, crea las tablas automáticamente (migraciones de Prisma), y deja el backend corriendo en `http://localhost:5000`.
+
+Para detenerlo:
+
+```bash
+# Ctrl + C en la terminal, luego:
+docker compose down
+```
+
+Para borrar también los datos guardados (empezar de cero):
+
+```bash
+docker compose down -v
+```
+
+### 4. Levantar el frontend (fuera de Docker)
+
+El frontend sigue corriendo de forma local, no está contenerizado:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+El frontend estará en `http://localhost:3000`.
+
+> **Nota:** las instrucciones manuales de instalación (sin Docker) siguen disponibles más abajo, por si prefieres instalar PostgreSQL directamente en tu máquina.
+
+---
+
 ## 📦 Instalación del proyecto (paso a paso)
 
 ### 1. Clonar el repositorio

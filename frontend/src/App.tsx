@@ -6,23 +6,20 @@ import Dashboard from './pages/Dashboard';
 import Solicitudes from './pages/Solicitudes';
 import NuevaSolicitud from './pages/NuevaSolicitud';
 import SolicitudDetalle from './pages/SolicitudDetalle';
+import LogAuditoria from './pages/LogAuditoria';
+import Usuarios from './pages/Usuarios';
 import TransparenciaActiva from './pages/TransparenciaActiva';
 import DetalleCarga from './pages/DetalleCarga';
 //import './App.css';
-
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
-
   if (loading) {
     return <div>Cargando...</div>;
   }
-
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
 };
-
 function App() {
   const { isAuthenticated } = useAuth();
-
   return (
     <BrowserRouter>
       <Routes>
@@ -56,6 +53,22 @@ function App() {
           element={
             <PrivateRoute>
               <SolicitudDetalle />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/logs"
+          element={
+            <PrivateRoute>
+              <LogAuditoria />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <PrivateRoute>
+              <Usuarios />
             </PrivateRoute>
           }
         />

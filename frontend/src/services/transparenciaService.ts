@@ -72,4 +72,17 @@ export const transparenciaService = {
     }
     return response.data.data!;
   },
+
+  /**
+ * Obtiene una carga mensual por su ID
+ * @param id - ID de la carga
+ * @returns La carga con sus detalles
+ */
+async obtenerCargaPorId(id: number): Promise<CargaMensual> {
+  const response = await apiClient.get<ApiResponse<CargaMensual>>(`/transparencia/carga/${id}`);
+  if (!response.data.success) {
+    throw new Error(response.data.message || 'Error al obtener la carga');
+  }
+  return response.data.data!;
+}
 };
