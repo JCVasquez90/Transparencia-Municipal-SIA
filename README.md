@@ -40,64 +40,6 @@ Proyecto académico — Instituto Profesional San Sebastián.
 
 Esta es la forma más rápida de levantar el backend y la base de datos, sin instalar PostgreSQL localmente.
 
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/JCVasquez90/Transparencia-Municipal-SIA.git
-cd Transparencia-Municipal-SIA
-```
-
-### 2. Crear el archivo de variables de entorno
-
-Copia el archivo de ejemplo y complétalo con tus propios valores:
-
-```bash
-cp .env.example .env
-```
-
-Edita `.env` y reemplaza `tu_usuario`, `tu_contraseña` y el secreto de JWT por valores reales. Puedes generar un `JWT_SECRET` seguro con:
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
-
-### 3. Levantar backend + base de datos con un solo comando
-
-```bash
-docker compose up --build
-```
-
-Esto construye la imagen del backend, descarga la imagen de PostgreSQL, crea las tablas automáticamente (migraciones de Prisma), y deja el backend corriendo en `http://localhost:5000`.
-
-Para detenerlo:
-
-```bash
-# Ctrl + C en la terminal, luego:
-docker compose down
-```
-
-Para borrar también los datos guardados (empezar de cero):
-
-```bash
-docker compose down -v
-```
-
-### 4. Levantar el frontend (fuera de Docker)
-
-El frontend sigue corriendo de forma local, no está contenerizado:
-
-```bash
-cd frontend
-npm install
-npm start
-```
-
-El frontend estará en `http://localhost:3000`.
-
-> **Nota:** las instrucciones manuales de instalación (sin Docker) siguen disponibles más abajo, por si prefieres instalar PostgreSQL directamente en tu máquina.
-
----
-
 ## 📦 Instalación del proyecto (paso a paso)
 
 ### 1. Clonar el repositorio
@@ -145,53 +87,168 @@ npm start
 # Para detenerlo: Ctrl + C
 
 Nota: Los archivos README.md y .gitignore dentro de frontend/ fueron eliminados porque ya existen en la raíz del proyecto.
+```
 
----
+### 2. Crear el archivo de variables de entorno
 
-# Descargar y ejecutar PostgreSQL en un contenedor
-docker run --name postgres-transparencia \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=miPassword \
-  -e POSTGRES_DB=transparencia_db \
-  -p 5432:5432 \
-  -d postgres:16
+Copia el archivo de ejemplo y complétalo con tus propios valores:
+```bash
+cp .env.example .env
+```
+Contenido del .env:
 
-# Verificar que el contenedor está corriendo
+# PostgreSQL
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=miPassword123
+POSTGRES_DB=transparencia_db
+
+# Backend
+DATABASE_URL="postgresql://postgres:miPassword123@db:5432/transparencia_db?schema=public"
+JWT_SECRET=genera_un_secreto_aleatorio_largo
+JWT_EXPIRES_IN=8h
+
+Generar un JWT_SECRET seguro:
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+### 3. Levantar backend + base de datos con un solo comando
+
+```bash
+docker compose up --build
+```
+Esto hace:
+Construye la imagen del backend.
+Descarga PostgreSQL 16.
+Ejecuta las migraciones de Prisma automáticamente.
+Levanta el backend en http://localhost:5000..
+
+Comandos útiles:
+
+Para detenerlo:
+```bash
+# Ctrl + C en la terminal, luego:
+docker compose down
+```
+Para borrar también los datos guardados (empezar de cero):
+```bash
+docker compose down -v
+```
+Ver los logs
+```bash
+docker compose logs -f
+```
+Verificar que los contenedores están corriendo
+```bash
 docker ps
 
----
-# Luego, configura la variable de entorno en el backend:
-Ve a backend/.env
+```
+### 4. Ejecutar el Seed (datos de prueba)
+El seed es opcional pero recomendado para pruebas. Pobla la base de datos con usuarios, solicitudes e ítems de transparencia.
 
-1. Ve a: backend/.env y si el acrchivo no esta por que fue ignorado al momento de subirlo crealo y agrega esta linea.
 
-DATABASE_URL="postgresql://postgres:miPassword@localhost:5432/transparencia_db?schema=public"
+1. Asegurarse de que el backend esté corriendo (con Docker)
+ ```bash
+docker ps
+ ```
 
----
-# levantar proyecto despues de la configuracion.
-## Terminal Backend.
+2. Ejecutar el seed
+ ```bash
+npx prisma db seed
+ ```
 
-cd backend
-npm run dev
-## El servidor estará en http://localhost:5000.
+3. Verificar en Prisma Studio
+```bash
+npx prisma studio
+ ```
 
-GET /api/health → Verificar que el servidor está funcionando.
+# Datos creados por el seed:
 
-GET /api/solicitudes → Ruta de prueba para solicitudes.
+Tabla	Cantidad	Descripción
+departamentos	7	Obras, Tránsito, Jurídica, etc.
+usuarios	5	2 OPERATIVO, 2 DIRECTOR, 1 ENLACE
+items_transparencia	5	Ítems de la Ley N° 20.285
+solicitudes	4	Con diferentes estados (pendiente, respondida, prórroga, vencida)
+cargas_mensuales	10	2 por cada ítem (agosto y septiembre 2026)
 
-GET /api/usuarios → Ruta de prueba para usuarios.
+### 4. Levantar el frontend (fuera de Docker)
 
-GET /api/transparencia → Ruta de prueba para transparencia activa.
+El frontend sigue corriendo de forma local, no está contenerizado:
 
-## Terminal Frontend 
-
+```bash
 cd frontend
+npm install
 npm start
-## El frontend estará en http://localhost:3000.
+```
 
+El frontend estará en `http://localhost:3000`.
+
+### 👤 Usuarios de prueba (Seed)
+Rol	Email	Contraseña
+OPERATIVO	operativo@test.com	miPassword123
+OPERATIVO	operativo2@test.com	miPassword123
+DIRECTOR	director@test.com	miPassword123
+DIRECTOR	director2@test.com	miPassword123
+ENLACE	enlace@test.com	miPassword123
+
+### 🧪 Pruebas recomendadas
+1. Autenticación
+Login: Usar las credenciales de prueba.
+
+Roles: Verificar que cada rol vea solo lo que le corresponde.
+
+Rol	Acceso
+OPERATIVO	Dashboard, Solicitudes, Transparencia Activa, Subir archivos
+DIRECTOR	Dashboard, Solicitudes, Transparencia Activa, Aprobar/Rechazar cargas
+ENLACE	Dashboard, Solicitudes, Transparencia Activa, Usuarios, Logs, Generar alertas
+2. Gestión de Solicitudes
+Crear solicitud: (solo OPERATIVO).
+
+Listar solicitudes: Ver todas con filtro por semáforo.
+
+Detalle de solicitud: Ver información completa.
+
+Responder solicitud: (solo DIRECTOR).
+
+Solicitar prórroga: (solo ENLACE).
+
+3. Carga de Archivos
+Subir archivo: (OPERATIVO o DIRECTOR) → PDF, JPG o PNG.
+
+Listar archivos: Ver todos los archivos de una solicitud.
+
+Descargar archivo: Hacer clic en el icono de descarga.
+
+4. Transparencia Activa
+Crear carga mensual: (solo OPERATIVO).
+
+Aprobar/Rechazar carga: (solo DIRECTOR).
+
+Publicar carga: (solo ENLACE).
+
+Ver detalle de carga: Todos los roles.
+
+5. KPIs y Dashboard
+Tasa de cumplimiento: Porcentaje de solicitudes respondidas dentro del plazo.
+
+Tiempo promedio de respuesta por departamento: Ranking de departamentos.
+
+6. Notificaciones
+Generar alertas manualmente: POST /api/transparencia/alertas/generar (solo ENLACE).
+
+Ver notificaciones: Hacer clic en la campana (OPERATIVO).
+
+Marcar como leída: Hacer clic en una notificación.
+
+7. Logs de Auditoría
+Ver logs: (solo ENLACE) → /logs.
 ---
 
-📂 Estructura de carpetas (después de la instalación)
+
+
+
+
+### 📂 Estructura de carpetas (después de la instalación)
 
 transparencia-municipal-sia/
 ├── backend/
@@ -205,10 +262,11 @@ transparencia-municipal-sia/
 │   │   ├── app.ts           # Configuración de Express
 │   │   └── index.ts         # Punto de entrada del servidor
 │   ├── prisma/
-│   │   └── schema.prisma    # Modelo de datos
+│   │   ├── schema.prisma    # Modelo de datos
+│   │   ├── seed.ts          # Datos de prueba (seeding)
+│   │   └── migrations/      # Migraciones de Prisma
 │   ├── generated/           # Código generado por Prisma (ignorado por Git)
 │   ├── node_modules/        # Dependencias (ignorado por Git)
-│   ├── .env                 # Variables locales (NO SUBIR)
 │   ├── package.json
 │   ├── tsconfig.json
 │   └── nodemon.json         # Configuración de nodemon
@@ -218,5 +276,16 @@ transparencia-municipal-sia/
 │   ├── node_modules/        # Dependencias (ignorado por Git)
 │   ├── package.json
 │   └── tsconfig.json
-├── .gitignore               # Archivos ignorados por Git (raíz)
-└── README.md                # Este manual (raíz)
+├── .env                     # Variables de entorno (NO SUBIR)
+├── .env.example             # Ejemplo de variables de entorno
+├── docker-compose.yml       # Configuración de Docker
+├── .gitignore               # Archivos ignorados por Git
+└── README.md                # Este manual
+
+### 🔧 Solución de problemas comunes
+Problema	Solución
+Error: port already allocated	Detener el contenedor anterior: docker stop postgres-transparencia
+Prisma Studio no encuentra la BD	Ejecutar con URL explícita: npx prisma studio --url "postgresql://..."
+No hay notificaciones	Generar alertas con POST /api/transparencia/alertas/generar (con token ENLACE).
+El seed no funciona	Verificar que el backend esté corriendo y ejecutar npx prisma db seed.
+Error de CORS	Verificar que el backend tenga el middleware cors() habilitado.
