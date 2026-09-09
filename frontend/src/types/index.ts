@@ -8,6 +8,7 @@ export interface Usuario {
   email: string;
   rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
   departamentoId: number;
+  departamento?: Departamento;
 }
 
 // ============================================
@@ -71,18 +72,48 @@ export interface SolicitarProrrogaFormValues {
 }
 
 // ============================================
+// TIPOS DE LOG (AUDITORÍA)
+// ============================================
+export interface Log {
+  id: number;
+  usuarioId: number;
+  accion:
+    | 'CREAR_SOLICITUD'
+    | 'RESPONDER_SOLICITUD'
+    | 'SOLICITAR_PRORROGA'
+    | 'CREAR_USUARIO'
+    | 'EDITAR_USUARIO'
+    | 'SUBIR_ARCHIVO';
+  detalle: string | null;
+  fechaHora: string;
+  usuario: {
+    id: number;
+    nombre: string;
+    email: string;
+    rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
+  };
+}
+// ============================================
+// TIPOS DE ARCHIVO
+// ============================================
+export interface Archivo {
+  id: number;
+  nombre: string;
+  ruta: string;
+  tipo: 'EVIDENCIA_SOLICITUD' | 'RESPUESTA';
+  solicitudId: number;
+}
+// ============================================
 // TIPOS PARA TRANSPARENCIA ACTIVA
 // ============================================
-
-export interface ItemTransparencia{
+export interface ItemTransparencia {
   id: number;
   nombre: string;
   descripcion: string;
   departamentoResponsableId: number;
   departamentoResponsable?: Departamento;
 }
-
-export interface CargaMensual{
+export interface CargaMensual {
   id: number;
   itemId: number;
   mes: number;
@@ -93,7 +124,3 @@ export interface CargaMensual{
   usuario?: Usuario;
   item?: ItemTransparencia;
 }
-
-
-
-export {};

@@ -29,3 +29,6 @@ Thumbs.db
 *.swp
 *.swo
 generated/
+# Uploads (archivos subidos por usuarios)
+uploads/
+backend/uploads/.env.docker

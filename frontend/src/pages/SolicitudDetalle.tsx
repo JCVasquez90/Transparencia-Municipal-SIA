@@ -13,12 +13,19 @@ import {
   Divider,
   Card,
   CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  MenuItem,
 } from '@mui/material';
+import { CloudUpload, Download, InsertDriveFile } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotification } from '../contexts/NotificationContext';
 import { solicitudService } from '../services/solicitudService';
-import { Solicitud } from '../types';
+import { archivoService } from '../services/archivoService';
+import { Solicitud, Archivo } from '../types';
 import Layout from '../components/common/Layout';
 
 // ============================================
@@ -47,6 +54,13 @@ const SolicitudDetalle: React.FC = () => {
   const [fundamentos, setFundamentos] = useState('');
   const [solicitandoProrroga, setSolicitandoProrroga] = useState(false);
 
+  // Estados para archivos
+  const [archivos, setArchivos] = useState<Archivo[]>([]);
+  const [cargandoArchivos, setCargandoArchivos] = useState(true);
+  const [archivoSeleccionado, setArchivoSeleccionado] = useState<File | null>(null);
+  const [tipoArchivo, setTipoArchivo] = useState<'EVIDENCIA_SOLICITUD' | 'RESPUESTA'>('EVIDENCIA_SOLICITUD');
+  const [subiendoArchivo, setSubiendoArchivo] = useState(false);
+
   // ============================================
   // 2. CARGAR DATOS
   // ============================================
@@ -68,6 +82,24 @@ const SolicitudDetalle: React.FC = () => {
     };
 
     cargarDetalle();
+  }, [id]);
+
+  useEffect(() => {
+    const cargarArchivos = async () => {
+      if (!id) return;
+      setCargandoArchivos(true);
+      try {
+        const data = await archivoService.listar(parseInt(id, 10));
+        setArchivos(data);
+      } catch (err: any) {
+        showNotification(err.message || 'Error al cargar los archivos', 'error');
+      } finally {
+        setCargandoArchivos(false);
+      }
+    };
+
+    cargarArchivos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // ============================================
@@ -112,6 +144,32 @@ const SolicitudDetalle: React.FC = () => {
       setError(mensaje);
     } finally {
       setSolicitandoProrroga(false);
+    }
+  };
+
+  const handleSubirArchivo = async () => {
+    if (!solicitud || !archivoSeleccionado) return;
+    setSubiendoArchivo(true);
+
+    try {
+      await archivoService.subir(solicitud.id, archivoSeleccionado, tipoArchivo);
+      const data = await archivoService.listar(solicitud.id);
+      setArchivos(data);
+      setArchivoSeleccionado(null);
+      showNotification('Archivo subido correctamente', 'success');
+    } catch (err: any) {
+      const mensaje = err.response?.data?.message || err.message || 'Error al subir el archivo';
+      showNotification(mensaje, 'error');
+    } finally {
+      setSubiendoArchivo(false);
+    }
+  };
+
+  const handleDescargarArchivo = async (archivo: Archivo) => {
+    try {
+      await archivoService.descargar(archivo.id, archivo.nombre);
+    } catch (err: any) {
+      showNotification('Error al descargar el archivo', 'error');
     }
   };
 
@@ -167,6 +225,7 @@ const SolicitudDetalle: React.FC = () => {
     usuario?.rol === 'ENLACE' &&
     solicitud.estado !== 'RESPONDIDA' &&
     solicitud.estado !== 'PRORROGA_SOLICITADA';
+  const puedeSubirArchivo = usuario?.rol === 'OPERATIVO' || usuario?.rol === 'DIRECTOR';
 
   return (
     <Layout>
@@ -297,7 +356,7 @@ const SolicitudDetalle: React.FC = () => {
 
       {/* Acciones: Solicitar prórroga */}
       {puedeSolicitarProrroga && (
-        <Card>
+        <Card sx={{ mb: 3 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               Solicitar prórroga
@@ -327,6 +386,87 @@ const SolicitudDetalle: React.FC = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Sección: Archivos adjuntos */}
+      <Card>
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Archivos adjuntos
+          </Typography>
+
+          {/* Listado */}
+          {cargandoArchivos ? (
+            <CircularProgress size={24} />
+          ) : archivos.length === 0 ? (
+            <Typography variant="body2" color="textSecondary">
+              No hay archivos adjuntos todavía
+            </Typography>
+          ) : (
+            <List>
+              {archivos.map((archivo) => (
+                <ListItem
+                  key={archivo.id}
+                  secondaryAction={
+                    <IconButton edge="end" onClick={() => handleDescargarArchivo(archivo)} title="Descargar">
+                      <Download />
+                    </IconButton>
+                  }
+                >
+                  <InsertDriveFile sx={{ mr: 2, color: 'text.secondary' }} />
+                  <ListItemText
+                    primary={archivo.nombre}
+                    secondary={archivo.tipo === 'EVIDENCIA_SOLICITUD' ? 'Evidencia' : 'Respuesta'}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          <Divider sx={{ my: 2 }} />
+
+          {/* Subir nuevo archivo (OPERATIVO y DIRECTOR) */}
+          {puedeSubirArchivo && (
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Button variant="outlined" component="label" startIcon={<CloudUpload />} disabled={subiendoArchivo}>
+                Seleccionar archivo
+                <input
+                  type="file"
+                  hidden
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={(e) => setArchivoSeleccionado(e.target.files?.[0] || null)}
+                />
+              </Button>
+
+              <TextField
+                select
+                label="Tipo"
+                value={tipoArchivo}
+                onChange={(e) => setTipoArchivo(e.target.value as 'EVIDENCIA_SOLICITUD' | 'RESPUESTA')}
+                size="small"
+                sx={{ minWidth: 200 }}
+                disabled={subiendoArchivo}
+              >
+                <MenuItem value="EVIDENCIA_SOLICITUD">Evidencia</MenuItem>
+                <MenuItem value="RESPUESTA">Respuesta</MenuItem>
+              </TextField>
+
+              <Button
+                variant="contained"
+                onClick={handleSubirArchivo}
+                disabled={!archivoSeleccionado || subiendoArchivo}
+              >
+                {subiendoArchivo ? <CircularProgress size={24} /> : 'Subir'}
+              </Button>
+
+              {archivoSeleccionado && (
+                <Typography variant="body2" color="textSecondary">
+                  {archivoSeleccionado.name}
+                </Typography>
+              )}
+            </Box>
+          )}
+        </CardContent>
+      </Card>
     </Layout>
   );
 };

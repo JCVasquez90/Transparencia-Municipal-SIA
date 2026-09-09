@@ -6,6 +6,7 @@ import {
   aprobarCarga,
   rechazarCarga,
   publicarCarga,
+  obtenerCargaPorId
 } from '../controllers/transparencia.controller.ts';
 import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
 
@@ -39,5 +40,8 @@ router.patch('/cargas/:id/rechazar', requireRole('DIRECTOR'), rechazarCarga);
 
 // PATCH /api/transparencia/cargas/:id/publicar - Publicar una carga (solo ENLACE)
 router.patch('/cargas/:id/publicar', requireRole('ENLACE'), publicarCarga);
+
+// Obtener una carga por ID
+router.get('/carga/:id', authMiddleware, requireRole('OPERATIVO', 'DIRECTOR', 'ENLACE'), obtenerCargaPorId);
 
 export default router;

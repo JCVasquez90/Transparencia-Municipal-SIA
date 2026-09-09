@@ -224,3 +224,50 @@ export async function publicarCarga(req: Request, res: Response) {
     });
   }
 }
+
+// ============================================
+// OBTENER CARGA POR ID
+// ============================================
+
+export async function obtenerCargaPorId(req: Request, res: Response) {
+  const id = Number(req.params.id);
+
+  if (isNaN(id)) {
+    return res.status(400).json({
+      success: false,
+      message: 'El id debe ser un número',
+    });
+  }
+
+  try {
+    const carga = await prisma.cargaMensual.findUnique({
+      where: { id },
+      include: {
+        usuario: true,
+        item: {
+          include: {
+            departamentoResponsable: true,
+          },
+        },
+      },
+    });
+
+    if (!carga) {
+      return res.status(404).json({
+        success: false,
+        message: 'Carga no encontrada',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: carga,
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error al obtener la carga',
+      error: error?.message,
+    });
+  }
+}

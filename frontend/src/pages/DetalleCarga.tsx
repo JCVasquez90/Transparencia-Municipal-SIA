@@ -42,34 +42,24 @@ const DetalleCarga: React.FC = () => {
   // 2. CARGAR DATOS
   // ============================================
 
-  useEffect(() => {
-    const cargarDetalle = async () => {
-      if (!id) return;
-      setLoading(true);
-      setError(null);
+ useEffect(() => {
+  const cargarDetalle = async () => {
+    if (!id) return;
+    setLoading(true);
+    setError(null);
 
-      try {
-        // Como no tenemos un endpoint específico para obtener una carga por ID,
-        // usamos listarCargas y filtramos por ID (alternativa temporal)
-        // Idealmente, deberías crear un endpoint GET /transparencia/carga/:id
-        const itemId = 1; // Temporal: asumimos que la carga pertenece al primer ítem
-        const cargas = await transparenciaService.listarCargas(itemId);
-        const cargaEncontrada = cargas.find((c) => c.id === parseInt(id, 10));
-        
-        if (!cargaEncontrada) {
-          setError('Carga no encontrada');
-        } else {
-          setCarga(cargaEncontrada);
-        }
-      } catch (err: any) {
-        setError(err.message || 'Error al cargar la carga');
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const cargaData = await transparenciaService.obtenerCargaPorId(parseInt(id, 10));
+      setCarga(cargaData);
+    } catch (err: any) {
+      setError(err.message || 'Error al cargar la carga');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    cargarDetalle();
-  }, [id]);
+  cargarDetalle();
+}, [id]);
 
   // ============================================
   // 3. MANEJADORES DE ACCIONES

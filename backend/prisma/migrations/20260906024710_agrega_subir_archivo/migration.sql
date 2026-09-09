@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "TipoAccion" ADD VALUE 'SUBIR_ARCHIVO';

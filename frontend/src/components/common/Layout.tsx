@@ -93,6 +93,34 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             >
               Solicitudes
             </Button>
+            {usuario?.rol === 'ENLACE' && (
+              <Button
+                component={Link}
+                to="/logs"
+                color="inherit"
+                sx={{
+                  fontWeight: isActive('/logs') ? 'bold' : 'normal',
+                  borderBottom: isActive('/logs') ? '2px solid white' : 'none',
+                  borderRadius: 0,
+                }}
+              >
+                Auditoría
+              </Button>
+            )}
+            {usuario?.rol === 'ENLACE' && (
+              <Button
+                component={Link}
+                to="/usuarios"
+                color="inherit"
+                sx={{
+                  fontWeight: isActive('/usuarios') ? 'bold' : 'normal',
+                  borderBottom: isActive('/usuarios') ? '2px solid white' : 'none',
+                  borderRadius: 0,
+                }}
+              >
+                Usuarios
+              </Button>
+            )}
             <Button
               component={Link}
               to="/transparencia"
@@ -144,7 +172,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </Container>
 
-      {/* Footer*/}
+      {/* Footer */}
       <Box
         component="footer"
         sx={{
