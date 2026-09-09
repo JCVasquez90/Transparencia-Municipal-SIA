@@ -200,7 +200,9 @@ const Usuarios: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h5">Gestión de Usuarios</Typography>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+          Gestión de Usuarios
+          </Typography>
         <Button variant="contained" startIcon={<PersonAdd />} onClick={abrirModalCrear}>
           Nuevo usuario
         </Button>

@@ -81,7 +81,7 @@ const LogAuditoria: React.FC = () => {
 
   return (
     <Layout>
-      <Typography variant="h5" sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
         Registro de Auditoría
       </Typography>
 
