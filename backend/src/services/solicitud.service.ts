@@ -5,19 +5,15 @@ import { TipoAccion } from '../../generated/prisma/enums.ts';
 import type { EstadoSemaforo } from '../utils/fechas.utils.ts';
 import type { CrearSolicitudDto, ResponderSolicitudDto, SolicitarProrrogaDto } from '../dtos/solicitud.dto.ts';
 
-//Genera folio automatico.
 async function generarFolio(): Promise<string> {
   const año = new Date().getFullYear();
-  //Obtener la última solicitud para saber el último número de folio
   const ultimaSolicitud = await prisma.solicitud.findFirst({
     orderBy: { id: 'desc' },
     select: { folio: true },
   });
 
-
   let numero = 1;
   if (ultimaSolicitud?.folio) {
-    //Extraer el número del folio y sumarle 1 para generar el nuevo folio
     const partes = ultimaSolicitud.folio.split('-');
     const ultimoNumero = parseInt(partes[partes.length - 1], 10);
     if (!isNaN(ultimoNumero)) {
@@ -205,4 +201,58 @@ export async function solicitarProrroga(id: number, datos: SolicitarProrrogaDto,
   });
 
   return resultado;
+}
+
+// ============================================
+// FUNCIÓN PARA OBTENER KPIs AVANZADOS
+// ============================================
+
+export async function obtenerKPIs() {
+  // Obtener todas las solicitudes con sus departamentos
+  const solicitudes = await prisma.solicitud.findMany({
+    include: {
+      departamento: true,
+    },
+  });
+
+  // Si no hay solicitudes, devolver valores por defecto
+  if (solicitudes.length === 0) {
+    return {
+      promedioPorDepartamento: [],
+      tasaCumplimiento: 0,
+    };
+  }
+
+  // 1. Tiempo promedio de respuesta por departamento
+  const tiempoPorDepartamento: Record<string, { total: number; count: number }> = {};
+
+  solicitudes.forEach((solicitud) => {
+    if (!solicitud.fechaRespuesta) return; // Solo considerar las respondidas
+
+    const diasHabiles = diasHabilesEntre(solicitud.fechaRecepcion, solicitud.fechaRespuesta);
+    const deptoNombre = solicitud.departamento?.nombre || 'Sin departamento';
+
+    if (!tiempoPorDepartamento[deptoNombre]) {
+      tiempoPorDepartamento[deptoNombre] = { total: 0, count: 0 };
+    }
+    tiempoPorDepartamento[deptoNombre].total += diasHabiles;
+    tiempoPorDepartamento[deptoNombre].count += 1;
+  });
+
+  const promedioPorDepartamento = Object.entries(tiempoPorDepartamento).map(([departamento, data]) => ({
+    departamento,
+    promedio: data.count > 0 ? Math.round(data.total / data.count) : 0,
+  }));
+
+  // 2. Tasa de cumplimiento de plazos
+  const solicitudesConPlazo = solicitudes.filter((s) => s.fechaRespuesta && s.plazoLimite);
+  const cumplidas = solicitudesConPlazo.filter((s) => s.fechaRespuesta! <= s.plazoLimite);
+  const tasaCumplimiento = solicitudesConPlazo.length > 0 
+    ? Math.round((cumplidas.length / solicitudesConPlazo.length) * 100) 
+    : 0;
+
+  return {
+    promedioPorDepartamento,
+    tasaCumplimiento,
+  };
 }

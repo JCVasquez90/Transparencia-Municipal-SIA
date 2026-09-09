@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import  Notificaciones  from './Notificaciones';
 
 // ============================================
 // COMPONENTE LAYOUT
@@ -140,6 +141,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Typography variant="body2" sx={{ color: 'white' }}>
               {usuario?.nombre} ({usuario?.rol})
             </Typography>
+            <Notificaciones />
             <IconButton
               onClick={handleMenuOpen}
               size="small"

@@ -74,6 +74,7 @@ export interface SolicitarProrrogaFormValues {
 // ============================================
 // TIPOS DE LOG (AUDITORÍA)
 // ============================================
+
 export interface Log {
   id: number;
   usuarioId: number;
@@ -93,9 +94,11 @@ export interface Log {
     rol: 'OPERATIVO' | 'DIRECTOR' | 'ENLACE';
   };
 }
+
 // ============================================
 // TIPOS DE ARCHIVO
 // ============================================
+
 export interface Archivo {
   id: number;
   nombre: string;
@@ -103,9 +106,11 @@ export interface Archivo {
   tipo: 'EVIDENCIA_SOLICITUD' | 'RESPUESTA';
   solicitudId: number;
 }
+
 // ============================================
 // TIPOS PARA TRANSPARENCIA ACTIVA
 // ============================================
+
 export interface ItemTransparencia {
   id: number;
   nombre: string;
@@ -113,6 +118,7 @@ export interface ItemTransparencia {
   departamentoResponsableId: number;
   departamentoResponsable?: Departamento;
 }
+
 export interface CargaMensual {
   id: number;
   itemId: number;
@@ -124,3 +130,21 @@ export interface CargaMensual {
   usuario?: Usuario;
   item?: ItemTransparencia;
 }
+
+// ============================================
+// TIPOS PARA NOTIFICACIONES
+// ============================================
+
+export interface Notificacion {
+  id: number;
+  usuarioId: number;
+  mensaje: string;
+  leida: boolean;
+  createdAt: string;
+}
+
+// ============================================
+// EXPORTAR PARA QUE SEA UN MÓDULO
+// ============================================
+
+export {};

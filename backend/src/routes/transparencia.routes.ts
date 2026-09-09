@@ -9,6 +9,7 @@ import {
   obtenerCargaPorId
 } from '../controllers/transparencia.controller.ts';
 import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
+import { generarAlertasController } from '../controllers/transparencia.controller.ts';
 
 const router = Router();
 
@@ -21,6 +22,10 @@ router.use(authMiddleware);
 
 // GET /api/transparencia/items - Listar todos los ítems
 router.get('/items', listarItems);
+
+//Ruta para generaralertas manuales (solo ENLACE O admin)
+router.post('/alertas/generar', requireRole('ENLACE'), generarAlertasController);
+
 
 // ============================================
 // CARGAS MENSUALES
