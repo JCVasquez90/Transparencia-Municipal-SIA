@@ -55,7 +55,7 @@ const TransparenciaActiva: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [nuevaCarga, setNuevaCarga] = useState({
     itemId: 0,
-    mes: '',
+    mes: String(new Date().getMonth() + 1),
     anio: new Date().getFullYear(),
   });
 
@@ -203,9 +203,9 @@ const TransparenciaActiva: React.FC = () => {
   return (
     <Layout>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-              <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
-                Transparencia Activa
-              </Typography>
+        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+          Transparencia Activa
+        </Typography>
         {usuario?.rol === 'OPERATIVO' && items.length > 0 && (
           <Button
             variant="contained"
@@ -314,7 +314,9 @@ const TransparenciaActiva: React.FC = () => {
                 <TableBody>
                   {cargas.map((carga) => (
                     <TableRow key={carga.id}>
-                      <TableCell>{carga.mes}</TableCell>
+                      <TableCell>
+                        {new Date(2026, parseInt(carga.mes, 10) - 1).toLocaleString('es-CL', { month: 'long' })}
+                      </TableCell>
                       <TableCell>{carga.anio}</TableCell>
                       <TableCell>{renderEstado(carga.estado)}</TableCell>
                       <TableCell>
@@ -373,7 +375,7 @@ const TransparenciaActiva: React.FC = () => {
       )}
 
       {/* Diálogo para nueva carga */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Nueva carga mensual</DialogTitle>
         <DialogContent>
           <TextField
@@ -402,9 +404,9 @@ const TransparenciaActiva: React.FC = () => {
             }
             margin="normal"
           >
-            {['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'].map((mes) => (
-              <MenuItem key={mes} value={mes}>
-                {mes}
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((m) => (
+              <MenuItem key={m} value={String(m)}>
+                {new Date(2026, m - 1).toLocaleString('es-CL', { month: 'long' })}
               </MenuItem>
             ))}
           </TextField>

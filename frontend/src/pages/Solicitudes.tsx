@@ -40,8 +40,8 @@ const Solicitudes: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<string>('');
-  const [ordenAscendente, setOrdenAscendente] = useState(false); // ← NUEVO: control de orden
-
+  const [ordenAscendente, setOrdenAscendente] = useState(false);
+  
   // Opciones para el filtro de semáforo
   const opcionesSemaforo = [
     { value: '', label: 'Todos' },
@@ -49,6 +49,7 @@ const Solicitudes: React.FC = () => {
     { value: 'AMARILLO', label: '🟡 Amarillo' },
     { value: 'ROJO', label: '🔴 Rojo' },
     { value: 'VENCIDO', label: '⚫ Vencido' },
+    { value: 'CERRADO', label: '✅ Cerrado' },
   ];
 
   // ============================================
@@ -104,6 +105,7 @@ const Solicitudes: React.FC = () => {
       AMARILLO: '🟡 Amarillo',
       ROJO: '🔴 Rojo',
       VENCIDO: '⚫ Vencido',
+      CERRADO: '✅ Cerrado',
     };
     return semaforo ? (
       <Chip label={labels[semaforo] || semaforo} color={colores[semaforo] || 'default'} size="small" />

@@ -10,6 +10,7 @@ import LogAuditoria from './pages/LogAuditoria';
 import Usuarios from './pages/Usuarios';
 import TransparenciaActiva from './pages/TransparenciaActiva';
 import DetalleCarga from './pages/DetalleCarga';
+import PublicoTransparencia from './pages/PublicoTransparencia';
 //import './App.css';
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -87,6 +88,11 @@ function App() {
               <DetalleCarga />
             </PrivateRoute>
           }
+        />
+        <Route
+        path="/transparencia/publicado"
+         element={<PublicoTransparencia />
+         }
         />
         <Route
           path="/"

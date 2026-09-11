@@ -31,9 +31,13 @@ export interface Solicitud {
   departamentoId: number;
   contenidoRespuesta?: string | null;
   fechaRespuesta?: string | null; // ISO date string
+  firma?: string | null;          // ← AGREGAR
+  fechaFirma?: string | null;
   departamento?: Departamento;
   diasHabiles?: number;
   semaforo?: 'VERDE' | 'AMARILLO' | 'ROJO' | 'VENCIDO';
+  enAmparo?: boolean;
+  fechaAmparo?: string | null;
 }
 
 // ============================================
@@ -122,7 +126,7 @@ export interface ItemTransparencia {
 export interface CargaMensual {
   id: number;
   itemId: number;
-  mes: number;
+  mes: string;
   anio: number;
   estado: 'PENDIENTE' | 'APROBADA' | 'PUBLICADA' | 'RECHAZADA';
   fechaCarga: string;
@@ -144,7 +148,25 @@ export interface Notificacion {
 }
 
 // ============================================
-// EXPORTAR PARA QUE SEA UN MÓDULO
+// TIPOS PARA SUBTAREAS
 // ============================================
+
+export interface Subtarea {
+  id: number;
+  solicitudId: number;
+  departamentoId: number;
+  descripcion: string;
+  estado: 'PENDIENTE' | 'EN_PROCESO' | 'RESPONDIDA';
+  contenidoRespuesta?: string | null;
+  fechaRespuesta?: string | null;
+  usuarioId?: number | null;
+  createdAt: string;
+  departamento?: Departamento;
+  usuario?: {
+    id: number;
+    nombre: string;
+    email: string;
+  } | null;
+}
 
 export {};

@@ -19,7 +19,6 @@ import {
   Grid,
 } from '@mui/material';
 import { ArrowUpward, ArrowDownward } from '@mui/icons-material';
-//import { useAuth } from '../contexts/AuthContext';
 import { solicitudService } from '../services/solicitudService';
 import { Solicitud } from '../types';
 import Layout from '../components/common/Layout';
@@ -41,10 +40,12 @@ const Dashboard: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [ordenAscendente, setOrdenAscendente] = useState(false); // ← Nuevo estado
+  const [ordenAscendente, setOrdenAscendente] = useState(false);
   const [kpisAvanzados, setKpisAvanzados] = useState<{
     promedioPorDepartamento: { departamento: string; promedio: number }[];
     tasaCumplimiento: number;
+    indiceAmparos: number;
+    totalAmparos: number;
   } | null>(null);
 
   // ============================================
@@ -112,6 +113,7 @@ const Dashboard: React.FC = () => {
       AMARILLO: '🟡 Amarillo',
       ROJO: '🔴 Rojo',
       VENCIDO: '⚫ Vencido',
+      CERRADO: '✅ Cerrado',
     };
     return semaforo ? (
       <Chip
@@ -203,7 +205,7 @@ const Dashboard: React.FC = () => {
               <Typography color="textSecondary" gutterBottom>
                 Tasa de cumplimiento
               </Typography>
-              <Typography variant="h4">
+              <Typography variant="h3">
                 {kpisAvanzados?.tasaCumplimiento ?? 0}%
               </Typography>
             </CardContent>
@@ -215,7 +217,7 @@ const Dashboard: React.FC = () => {
               <Typography color="textSecondary" gutterBottom>
                 Mejor departamento
               </Typography>
-              <Typography variant="h6">
+              <Typography variant="h4">
                 {kpisAvanzados?.promedioPorDepartamento.length
                   ? kpisAvanzados.promedioPorDepartamento.reduce((a, b) => a.promedio < b.promedio ? a : b).departamento
                   : '-'}
@@ -228,8 +230,24 @@ const Dashboard: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
+        {/* Tarjeta de amparo */}
+         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+        <Card>
+          <CardContent>
+            <Typography color="textSecondary" gutterBottom>
+              Índice de amparos
+            </Typography>
+            <Typography variant="h4" color={kpisAvanzados?.indiceAmparos && kpisAvanzados.indiceAmparos > 10 ? 'error' : 'textPrimary'}>
+              {kpisAvanzados?.indiceAmparos ?? 0}%
+            </Typography>
+            <Typography variant="caption" color="textSecondary">
+              {kpisAvanzados?.totalAmparos ?? 0} solicitudes en amparo
+            </Typography>
+          </CardContent>
+        </Card>
       </Grid>
-      
+      </Grid>
+        
       {/* Tabla de solicitudes con ordenamiento */}
       <Paper sx={{ p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

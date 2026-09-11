@@ -24,7 +24,7 @@ export type CrearSolicitudDto = z.infer<typeof crearSolicitudSchema>;
 export const listarSolicitudesQuerySchema = z.object({
   estado: z.preprocess(
     (val) => (typeof val === 'string' ? val.toUpperCase() : val),
-    z.enum(['VERDE', 'AMARILLO', 'ROJO', 'VENCIDO']).optional()
+    z.enum(['VERDE', 'AMARILLO', 'ROJO', 'VENCIDO', 'CERRADO']).optional()
   ),
 });
 
@@ -41,3 +41,22 @@ export const solicitarProrrogaSchema = z.object({
 });
 
 export type SolicitarProrrogaDto = z.infer<typeof solicitarProrrogaSchema>;
+
+export const firmarSolicitudSchema = z.object({
+  firma: z.string().trim().min(1, 'La firma es obligatoria'),
+});
+
+export type FirmarSolicitudDto = z.infer<typeof firmarSolicitudSchema>;
+
+export const crearSubtareaSchema = z.object({
+  departamentoId: z.number().int().positive('El departamentoId debe ser un número positivo'),
+  descripcion: z.string().trim().min(1, 'La descripción es obligatoria'),
+});
+
+export type CrearSubtareaDto = z.infer<typeof crearSubtareaSchema>;
+
+export const responderSubtareaSchema = z.object({
+  contenidoRespuesta: z.string().trim().min(1, 'El contenido de la respuesta es obligatorio'),
+});
+
+export type ResponderSubtareaDto = z.infer<typeof responderSubtareaSchema>;

@@ -58,6 +58,7 @@ model Departamento {
   solicitudes      Solicitud[]
   usuarios         Usuario[]
   itemsResponsable ItemTransparencia[] @relation("departamentoResponsable")
+  subtareas        Subtarea[] 
 
   @@map("departamentos")
 }
@@ -74,6 +75,7 @@ model Usuario {
   logs            Log[]
   notificaciones  Notificacion[]
   cargasMensuales CargaMensual[]
+  subtareas       Subtarea[] 
 
   @@map("usuarios")
 }
@@ -100,10 +102,15 @@ model Solicitud {
   usuarioId      Int              @map("usuario_id")
   departamento   Departamento     @relation(fields: [departamentoId], references: [id])
   departamentoId Int              @map("departamento_id")
+  firma          String?          // Texto de Firma ej. Firmado por: María López.
+  fechaFirma     DateTime?        @map("fecha_Firma")
   contenidoRespuesta String?
   fechaRespuesta     DateTime?
   archivos       Archivo[]
   resolucionExenta ResolucionExenta?
+  subtareas      Subtarea[]
+  enAmparo     Boolean   @default(false) @map("en_amparo")
+  fechaAmparo  DateTime? @map("fecha_amparo")
 
   @@map("solicitudes")
 }
@@ -167,4 +174,27 @@ model ResolucionExenta {
   solicitudId   Int       @unique @map("solicitud_id") // una solicitud = máximo una resolución de prórroga
 
   @@map("resoluciones_exentas")
+}
+
+enum EstadoSubtarea {
+  PENDIENTE
+  EN_PROCESO
+  RESPONDIDA
+}
+
+model Subtarea {
+  id                 Int             @id @default(autoincrement())
+  solicitudId        Int             @map("solicitud_id")
+  solicitud          Solicitud       @relation(fields: [solicitudId], references: [id])
+  departamentoId     Int             @map("departamento_id")
+  departamento       Departamento    @relation(fields: [departamentoId], references: [id])
+  descripcion        String
+  estado             EstadoSubtarea  @default(PENDIENTE)
+  contenidoRespuesta String?         @map("contenido_respuesta")
+  fechaRespuesta     DateTime?       @map("fecha_respuesta")
+  usuarioId          Int?            @map("usuario_id")
+  usuario            Usuario?        @relation(fields: [usuarioId], references: [id])
+  createdAt          DateTime        @default(now()) @map("created_at")
+
+  @@map("subtareas")
 }

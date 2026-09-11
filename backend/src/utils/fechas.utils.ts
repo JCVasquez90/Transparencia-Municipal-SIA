@@ -42,4 +42,4 @@ export function diasHabilesEntre(desde: Date, hasta: Date): number {
 //   ROJO:     16-20 días hábiles
 //   VENCIDO:  más de 20 días hábiles
 
-export type EstadoSemaforo = 'VERDE' | 'AMARILLO' | 'ROJO' | 'VENCIDO';
+export type EstadoSemaforo = 'VERDE' | 'AMARILLO' | 'ROJO' | 'VENCIDO' | 'CERRADO';

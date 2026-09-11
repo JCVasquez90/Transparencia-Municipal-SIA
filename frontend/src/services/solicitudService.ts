@@ -1,5 +1,5 @@
 import apiClient from '../api/client';
-import { Solicitud, ApiResponse } from '../types';
+import { Solicitud, ApiResponse, Subtarea } from '../types';
 
 export const solicitudService = {
   async listar(estadoSemaforo?: string): Promise<Solicitud[]> {
@@ -49,6 +49,8 @@ export const solicitudService = {
   async obtenerKPIsAvanzados(): Promise<{
     promedioPorDepartamento: { departamento: string; promedio: number }[];
     tasaCumplimiento: number;
+    indiceAmparos: number;
+    totalAmparos: number;
   }> {
     const response = await apiClient.get<ApiResponse<any>>('/solicitudes/kpis');
     if (!response.data.success) {
@@ -84,6 +86,67 @@ export const solicitudService = {
     });
     if (!response.data.success) {
       throw new Error(response.data.message || 'Error al solicitar la prórroga');
+    }
+    return response.data.data!;
+  },
+
+  async firmar(id: number, firma: string): Promise<Solicitud> {
+    const response = await apiClient.patch<ApiResponse<Solicitud>>(`/solicitudes/${id}/firmar`, { firma });
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al firmar la solicitud');
+    }
+    return response.data.data!;
+  },
+
+  async crearSubtarea(solicitudId: number, datos: {
+    departamentoId: number;
+    descripcion: string;
+  }): Promise<Subtarea> {
+    const response = await apiClient.post<ApiResponse<Subtarea>>(
+      `/solicitudes/${solicitudId}/subtareas`,
+      datos
+    );
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al crear la subtarea');
+    }
+    return response.data.data!;
+  },
+
+  async listarSubtareas(solicitudId: number): Promise<Subtarea[]> {
+    const response = await apiClient.get<ApiResponse<Subtarea[]>>(
+      `/solicitudes/${solicitudId}/subtareas`
+    );
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al listar las subtareas');
+    }
+    return response.data.data || [];
+  },
+
+  async responderSubtarea(subtareaId: number, contenidoRespuesta: string): Promise<Subtarea> {
+    const response = await apiClient.patch<ApiResponse<Subtarea>>(
+      `/solicitudes/subtareas/${subtareaId}/responder`,
+      { contenidoRespuesta }
+    );
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al responder la subtarea');
+    }
+    return response.data.data!;
+  },
+
+  async consolidarSubtareas(solicitudId: number): Promise<Solicitud> {
+    const response = await apiClient.post<ApiResponse<Solicitud>>(
+      `/solicitudes/${solicitudId}/consolidar`
+    );
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al consolidar las subtareas');
+    }
+    return response.data.data!;
+  },
+
+  async marcarEnAmparo(id: number): Promise<Solicitud> {
+    const response = await apiClient.patch<ApiResponse<Solicitud>>(`/solicitudes/${id}/amparo`);
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error al marcar en amparo');
     }
     return response.data.data!;
   },

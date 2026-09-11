@@ -6,12 +6,21 @@ import {
   aprobarCarga,
   rechazarCarga,
   publicarCarga,
-  obtenerCargaPorId
+  obtenerCargaPorId,
+  generarAlertasController,
+  obtenerPublicaciones,
 } from '../controllers/transparencia.controller.ts';
 import { authMiddleware, requireRole } from '../middlewares/auth.middleware.ts';
-import { generarAlertasController } from '../controllers/transparencia.controller.ts';
 
 const router = Router();
+
+// ============================================
+// RUTA PÚBLICA (SIN AUTENTICACIÓN)
+// ============================================
+
+// Endpoint público para que el portal del municipio consuma las publicaciones
+console.log('✅ Rutas de transparencia registradas');
+router.get('/publicado', obtenerPublicaciones);
 
 // Todas las rutas requieren autenticación
 router.use(authMiddleware);

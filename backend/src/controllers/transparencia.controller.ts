@@ -293,3 +293,56 @@ export async function generarAlertasController(req: Request, res: Response) {
     });
   }
 }
+
+// ============================================
+// CONTROLADOR API DE SALIDA PARA PUBLICAR
+// ============================================
+
+export async function obtenerPublicaciones(req: Request, res: Response) {
+  const { mes, anio } = req.query;
+
+  if (!mes || !anio) {
+    return res.status(400).json({
+      success: false,
+      message: 'Debes especificar el mes y el año',
+    });
+  }
+
+  try {
+    const cargasPublicadas = await prisma.cargaMensual.findMany({
+      where: {
+        mes: mes as string,
+        anio: Number(anio),
+        estado: 'PUBLICADA',
+      },
+      include: {
+        item: {
+          include: {
+            departamentoResponsable: true,
+          },
+        },
+        usuario: {
+          select: { nombre: true, email: true },
+        },
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        municipio: 'Municipio X',
+        mes: mes,
+        anio: anio,
+        totalPublicaciones: cargasPublicadas.length,
+        publicaciones: cargasPublicadas,
+        fechaConsulta: new Date().toISOString(),
+      },
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error al obtener las publicaciones',
+      error: error?.message,
+    });
+  }
+}
