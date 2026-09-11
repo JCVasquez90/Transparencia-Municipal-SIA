@@ -5,9 +5,9 @@ import { TipoAccion } from '../../generated/prisma/enums.ts';
 import type { EstadoSemaforo } from '../utils/fechas.utils.ts';
 import type { CrearSolicitudDto, ResponderSolicitudDto, SolicitarProrrogaDto } from '../dtos/solicitud.dto.ts';
 
-async function generarFolio(): Promise<string> {
-  const año = new Date().getFullYear();
+async function generarFolio(año: number): Promise<string> {
   const ultimaSolicitud = await prisma.solicitud.findFirst({
+    where: { folio: { startsWith: `SIA-${año}-` } },
     orderBy: { id: 'desc' },
     select: { folio: true },
   });
@@ -26,33 +26,51 @@ async function generarFolio(): Promise<string> {
 }
 
 export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number) {
-  const folio = await generarFolio();
   const fechaRecepcion = new Date(datos.fechaRecepcion);
   const plazoLimite = sumarDiasHabiles(fechaRecepcion, 20);
+  const año = fechaRecepcion.getFullYear();
 
-  const solicitud = await prisma.$transaction(async (tx) => {
-    const nuevaSolicitud = await tx.solicitud.create({
-      data: {
-        folio,
-        fechaRecepcion,
-        descripcion: datos.descripcion.trim(),
-        plazoLimite,
-        usuarioId,
-        departamentoId: datos.departamentoId,
-      },
-    });
+  const MAX_INTENTOS = 3;
+  let intento = 0;
 
-    await tx.log.create({
-      data: {
-        usuarioId,
-        accion: TipoAccion.CREAR_SOLICITUD,
-      },
-    });
+  while (intento < MAX_INTENTOS) {
+    intento++;
+    const folio = await generarFolio(año);
 
-    return nuevaSolicitud;
-  });
+    try {
+      const solicitud = await prisma.$transaction(async (tx) => {
+        const nuevaSolicitud = await tx.solicitud.create({
+          data: {
+            folio,
+            fechaRecepcion,
+            descripcion: datos.descripcion.trim(),
+            plazoLimite,
+            usuarioId,
+            departamentoId: datos.departamentoId,
+          },
+        });
 
-  return solicitud;
+        await tx.log.create({
+          data: {
+            usuarioId,
+            accion: TipoAccion.CREAR_SOLICITUD,
+          },
+        });
+
+        return nuevaSolicitud;
+      });
+
+      return solicitud;
+    } catch (error: any) {
+      // P2002 = Prisma: violación de restricción única (folio duplicado por concurrencia)
+      if (error?.code === 'P2002' && intento < MAX_INTENTOS) {
+        continue; // reintenta generando un folio nuevo
+      }
+      throw error;
+    }
+  }
+
+  throw new Error('No se pudo generar un folio único después de varios intentos');
 }
 
 export async function listarSolicitudes(estadoSemaforo?: EstadoSemaforo) {

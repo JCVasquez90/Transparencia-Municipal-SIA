@@ -14,6 +14,15 @@ export const crearSolicitudSchema = z.object({
       );
     }, {
       message: 'La fecha de recepción no es válida',
+    })
+    .refine((fecha) => {
+      const [año, mes, dia] = fecha.split('-').map(Number);
+      const fechaIngresada = new Date(año, mes - 1, dia);
+      const hoy = new Date();
+      hoy.setHours(0, 0, 0, 0);
+      return fechaIngresada <= hoy;
+    }, {
+      message: 'La fecha de recepción no puede ser una fecha futura',
     }),
   descripcion: z.string().trim().min(1, 'La descripción es obligatoria'),
   departamentoId: z.number().int().positive(),
