@@ -70,7 +70,12 @@ const NuevaSolicitud: React.FC = () => {
       showNotification('Solicitud creada exitosamente', 'success');
       navigate('/solicitudes');
     } catch (err: any) {
-      const mensaje = err.response?.data?.message || err.message || 'Error al crear la solicitud'; 
+      const erroresCampo = err.response?.data?.errors;
+      const primerErrorDeCampo = erroresCampo
+        ? (Object.values(erroresCampo)[0] as string[] | undefined)?.[0]
+        : undefined;
+      const mensaje =
+        primerErrorDeCampo || err.response?.data?.message || err.message || 'Error al crear la solicitud';
       showNotification(mensaje, 'error');
       setError(mensaje);
     } finally {

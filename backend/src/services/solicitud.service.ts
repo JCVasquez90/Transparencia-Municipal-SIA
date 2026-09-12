@@ -12,41 +12,39 @@ import type {
   ResponderSubtareaDto 
 } from '../dtos/solicitud.dto.ts';
 
-async function generarFolio(): Promise<string> {
-  const año = new Date().getFullYear();
-
-  // Obtener todas las solicitudes del año actual
-  const solicitudesDelAño = await prisma.solicitud.findMany({
-    where: {
-      folio: { startsWith: `SIA-${año}-` },
-    },
+async function generarFolio(año: number): Promise<string> {
+  const ultimaSolicitud = await prisma.solicitud.findFirst({
+    where: { folio: { startsWith: `SIA-${año}-` } },
+    orderBy: { id: 'desc' },
     select: { folio: true },
   });
 
-  // Extraer los números y encontrar el máximo
-  let maxNumero = 0;
-  solicitudesDelAño.forEach((s) => {
-    const partes = s.folio.split('-');
-    const numero = parseInt(partes[partes.length - 1], 10);
-    if (!isNaN(numero) && numero > maxNumero) {
-      maxNumero = numero;
+  let numero = 1;
+  if (ultimaSolicitud?.folio) {
+    const partes = ultimaSolicitud.folio.split('-');
+    const ultimoNumero = parseInt(partes[partes.length - 1], 10);
+    if (!isNaN(ultimoNumero)) {
+      numero = ultimoNumero + 1;
     }
-  });
+  }
 
-  const nuevoNumero = maxNumero + 1;
-  const numeroFormateado = String(nuevoNumero).padStart(3, '0');
+  const numeroFormateado = String(numero).padStart(3, '0');
   return `SIA-${año}-${numeroFormateado}`;
 }
 
 export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number) {
   const fechaRecepcion = new Date(datos.fechaRecepcion);
   const plazoLimite = sumarDiasHabiles(fechaRecepcion, 20);
+  const año = fechaRecepcion.getFullYear();
 
-  // Reintentar hasta 3 veces en caso de colisión de folio
-  for (let intento = 0; intento < 3; intento++) {
+  const MAX_INTENTOS = 3;
+  let intento = 0;
+
+  while (intento < MAX_INTENTOS) {
+    intento++;
+    const folio = await generarFolio(año);
+
     try {
-      const folio = await generarFolio();
-
       const solicitud = await prisma.$transaction(async (tx) => {
         const nuevaSolicitud = await tx.solicitud.create({
           data: {
@@ -63,7 +61,7 @@ export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number
           data: {
             usuarioId,
             accion: TipoAccion.CREAR_SOLICITUD,
-            detalle: `Creó la solicitud con folio ${folio}`, // ← PROBLEMA N°4 RESUELTO
+            detalle: `Creó la solicitud con folio ${folio}`,
           },
         });
 
@@ -72,15 +70,15 @@ export async function crearSolicitud(datos: CrearSolicitudDto, usuarioId: number
 
       return solicitud;
     } catch (error: any) {
-      // Si es un error de folio duplicado, reintentar
-      if (error?.code === 'P2002' && intento < 2) {
-        continue;
+      // P2002 = Prisma: violación de restricción única (folio duplicado por concurrencia)
+      if (error?.code === 'P2002' && intento < MAX_INTENTOS) {
+        continue; // reintenta generando un folio nuevo
       }
       throw error;
     }
   }
 
-  throw new Error('No se pudo generar un folio único después de 3 intentos');
+  throw new Error('No se pudo generar un folio único después de varios intentos');
 }
 
 export async function listarSolicitudes(estadoSemaforo?: EstadoSemaforo) {
